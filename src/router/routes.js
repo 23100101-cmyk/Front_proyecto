@@ -20,7 +20,10 @@ const routes = [
       { path: 'registro-vacante', component: () => import('pages/JobRegistrationPage.vue') },
       { path: 'dashboard-skills', component: () => import('pages/SkillsDashboard.vue') },
       { path: 'dashboard-critico', component: () => import('pages/CriticalSkillsDashboard.vue') },
-      { path: 'encuesta-salida', component: () => import('pages/ExitInterviewForm.vue') }
+      { path: 'encuesta-salida', component: () => import('pages/ExitInterviewForm.vue') },
+      { path: 'catalogo-cursos', component: () => import('pages/CourseCatalog.vue') },
+      { path: 'mi-perfil-dashboard', component: () => import('pages/UserProfileDashboard.vue') },
+      { path: 'progreso-cursos', component: () => import('pages/MyCourseProgress.vue') }
 
 
     ]

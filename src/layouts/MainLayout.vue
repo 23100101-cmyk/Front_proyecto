@@ -3,6 +3,9 @@
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title> HUB de Capacitación </q-toolbar-title>
+        <q-btn flat dense icon="notifications" to="/notificaciones">
+          <q-badge color="red" floating></q-badge>
+        </q-btn>
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>

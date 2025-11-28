@@ -1,136 +1,85 @@
 <template>
   <q-page class="q-pa-lg">
-    <!-- Points Header -->
-    <q-card flat class="bg-gradient q-mb-lg text-white">
+    <div class="row items-center justify-between q-mb-lg">
+      <div>
+        <h1 class="text-h4 text-weight-bold">Gamificación</h1>
+        <p class="text-caption text-grey-7">Tu progreso en el sistema</p>
+      </div>
+    </div>
+
+    <div class="row q-col-gutter-lg">
+      <div class="col-xs-12 col-md-6">
+        <q-card class="bg-gradient">
+          <q-card-section>
+            <div class="text-white">
+              <div class="text-h6">Puntos Totales</div>
+              <div class="text-h2 text-weight-bold q-mt-md">{{ puntosTotales }}</div>
+              <div class="text-caption q-mt-md">
+                +{{ puntosMesActual }} este mes
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
+      </div>
+
+      <div class="col-xs-12 col-md-6">
+        <q-card>
+          <q-card-section>
+            <div class="text-h6 q-mb-md">Logros</div>
+            <div class="row q-col-gutter-md">
+              <div v-for="logro in logros" :key="logro.id" class="col-auto">
+                <div class="text-center">
+                  <q-icon :name="logro.icono" size="40px" :color="logro.color" />
+                  <div class="text-caption q-mt-xs">{{ logro.nombre }}</div>
+                </div>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
+      </div>
+    </div>
+
+    <q-card class="q-mt-lg">
       <q-card-section>
-        <div class="row items-center justify-between">
-          <div>
-            <div class="text-subtitle2">Mis Puntos Totales</div>
-            <div class="text-h3 text-weight-bold">{{ gamStore.totalPoints }}</div>
-          </div>
-          <q-icon name="star" size="80px" color="yellow" />
-        </div>
+        <div class="text-h6 q-mb-md">Historial de Puntos</div>
+        <q-table :rows="historialPuntos" :columns="columnasHistorial" flat bordered row-key="id" />
       </q-card-section>
     </q-card>
-
-    <!-- Tabs -->
-    <q-tabs v-model="activeTab" dense class="text-grey-7 q-mb-lg" indicator-color="primary">
-      <q-tab name="breakdown" icon="bar_chart" label="Desglose de Puntos" />
-      <q-tab name="history" icon="history" label="Historial" />
-      <q-tab name="achievements" icon="emoji_events" label="Logros" />
-    </q-tabs>
-
-    <!-- Tab Panels -->
-    <q-tab-panels v-model="activeTab" animated>
-      <!-- Breakdown Tab -->
-      <q-tab-panel name="breakdown">
-        <div class="row q-col-gutter-md">
-          <q-card
-            v-for="(points, action) in gamStore.pointsBreakdown"
-            :key="action"
-            class="col-xs-12 col-sm-6 col-md-4"
-          >
-            <q-card-section>
-              <div class="text-subtitle2 text-weight-bold">{{ formatAction(action) }}</div>
-              <div class="text-h5 text-primary q-mt-md">+{{ points }}</div>
-              <p class="text-caption text-grey-6 q-mt-md">puntos acumulados</p>
-            </q-card-section>
-          </q-card>
-        </div>
-      </q-tab-panel>
-
-      <!-- History Tab -->
-      <q-tab-panel name="history">
-        <q-spinner v-if="gamStore.loading" color="primary" size="50px" class="q-my-lg" />
-
-        <div v-else-if="gamStore.pointsHistory.length === 0" class="text-center q-py-lg">
-          <p class="text-h6 text-grey-6">No hay historial de puntos aún</p>
-        </div>
-
-        <q-timeline v-else layout="dense">
-          <q-timeline-entry
-            v-for="entry in gamStore.pointsHistory"
-            :key="entry.id"
-            :title="formatAction(entry.action)"
-            :subtitle="formatDate(entry.date)"
-            icon="star"
-            color="primary"
-          >
-            <div>
-              <div class="text-h6 text-weight-bold text-positive">+{{ entry.points }} puntos</div>
-              <p class="text-body2 q-mt-xs">{{ entry.description }}</p>
-            </div>
-          </q-timeline-entry>
-        </q-timeline>
-      </q-tab-panel>
-
-      <!-- Achievements Tab -->
-      <q-tab-panel name="achievements">
-        <q-spinner v-if="gamStore.loading" color="primary" size="50px" class="q-my-lg" />
-
-        <div v-else-if="gamStore.achievements.length === 0" class="text-center q-py-lg">
-          <p class="text-h6 text-grey-6">Completa acciones para desbloquear logros</p>
-        </div>
-
-        <div v-else class="row q-col-gutter-md">
-          <q-card
-            v-for="achievement in gamStore.achievements"
-            :key="achievement.id"
-            class="col-xs-12 col-sm-6 col-md-4"
-            :class="{ 'bg-grey-2': !achievement.unlocked }"
-          >
-            <q-card-section class="text-center">
-              <div class="text-h2 q-mb-md">{{ achievement.icon }}</div>
-              <div class="text-subtitle1 text-weight-bold">{{ achievement.name }}</div>
-              <p class="text-caption text-grey-6 q-mt-xs">{{ achievement.description }}</p>
-              <q-badge
-                v-if="achievement.unlocked"
-                label="Desbloqueado"
-                color="positive"
-                class="q-mt-md"
-              />
-              <q-badge v-else label="Bloqueado" color="grey" class="q-mt-md" />
-            </q-card-section>
-          </q-card>
-        </div>
-      </q-tab-panel>
-    </q-tab-panels>
   </q-page>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useGamificationStore } from 'src/stores/gamification'
+import { ref, computed } from 'vue'
 
-const gamStore = useGamificationStore()
-const activeTab = ref('breakdown')
+const puntosTotales = ref(1250)
+const historialPuntos = ref([
+  { id: 1, evento: 'Perfil completado', puntos: 50, fecha: '2024-01-15' },
+  { id: 2, evento: 'Skill agregada', puntos: 20, fecha: '2024-01-14' },
+  { id: 3, evento: 'Postulación enviada', puntos: 10, fecha: '2024-01-13' },
+  { id: 4, evento: 'Certificación validada', puntos: 100, fecha: '2024-01-12' },
+])
 
-// Methods
-const formatAction = (action) => {
-  const actions = {
-    'complete-profile': 'Perfil Completado',
-    'add-certification': 'Certificación Agregada',
-    'complete-course': 'Curso Completado',
-    'apply-opportunity': 'Candidatura Realizada',
-    'skill-verified': 'Competencia Verificada',
-  }
-  return actions[action] || action
-}
+const logros = ref([
+  { id: 1, nombre: 'Primer Paso', icono: 'done', color: 'positive' },
+  { id: 2, nombre: 'Conectado', icono: 'people', color: 'info' },
+  { id: 3, nombre: 'Experto', icono: 'star', color: 'warning' },
+])
 
-const formatDate = (date) => {
-  return new Date(date).toLocaleDateString('es-ES', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
+const columnasHistorial = [
+  { name: 'evento', label: 'Evento', field: 'evento', align: 'left' },
+  { name: 'puntos', label: 'Puntos', field: 'puntos', align: 'center' },
+  { name: 'fecha', label: 'Fecha', field: 'fecha', align: 'right' },
+]
 
-// Lifecycle
-onMounted(async () => {
-  await gamStore.fetchPoints()
-  await gamStore.fetchAchievements()
+const puntosMesActual = computed(() => {
+  const ahora = new Date()
+  const mesActual = ahora.getMonth()
+  return historialPuntos.value
+    .filter((h) => {
+      const fecha = new Date(h.fecha)
+      return fecha.getMonth() === mesActual
+    })
+    .reduce((sum, h) => sum + h.puntos, 0)
 })
 </script>
 

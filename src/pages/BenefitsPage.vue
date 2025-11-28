@@ -1,155 +1,103 @@
 <template>
   <q-page class="q-pa-lg">
-    <!-- Error Banner -->
-    <q-banner v-if="benStore.error" class="bg-negative text-white q-mb-lg" dense closable @close="benStore.clearError()">
-      {{ benStore.error }}
-    </q-banner>
+    <div class="row items-center justify-between q-mb-lg">
+      <div>
+        <h1 class="text-h4 text-weight-bold">Beneficios</h1>
+        <p class="text-caption text-grey-7">Tu paquete de compensación</p>
+      </div>
+    </div>
 
-    <!-- Tabs -->
-    <q-tabs v-model="activeTab" dense class="text-grey-7 q-mb-lg" indicator-color="primary">
-      <q-tab name="benefits" icon="card_giftcard" label="Beneficios" />
-      <q-tab name="exit-survey" icon="assignment" label="Encuesta de Salida" />
+    <q-tabs v-model="tabActual" dense class="q-mb-lg" indicator-color="primary">
+      <q-tab name="beneficios" label="Mis Beneficios" icon="card_giftcard" />
+      <q-tab name="compensacion" label="Compensación" icon="attach_money" />
+      <q-tab name="encuesta" label="Encuesta de Salida" icon="logout" />
     </q-tabs>
 
-    <!-- Tab Panels -->
-    <q-tab-panels v-model="activeTab" animated>
-      <!-- Benefits Tab -->
-      <q-tab-panel name="benefits">
+    <q-tab-panels v-model="tabActual" animated>
+      <q-tab-panel name="beneficios">
         <div class="row q-col-gutter-lg">
-          <!-- Salary Card -->
-          <q-card class="col-xs-12 col-sm-6 col-md-4">
-            <q-card-section>
-              <div class="text-subtitle2 text-weight-bold q-mb-sm">Salario</div>
-              <div class="text-h4 text-primary">{{ formatCurrency(benStore.benefits.salary) }}</div>
-              <p class="text-caption text-grey-6 q-mt-md">Compensación base anual</p>
-            </q-card-section>
-          </q-card>
-
-          <!-- Health Insurance Card -->
-          <q-card class="col-xs-12 col-sm-6 col-md-4">
-            <q-card-section>
-              <div class="text-subtitle2 text-weight-bold q-mb-sm">Seguro de Salud</div>
-              <div class="text-body1 text-primary">{{ benStore.benefits.healthInsurance }}</div>
-              <p class="text-caption text-grey-6 q-mt-md">Plan de salud integral</p>
-            </q-card-section>
-          </q-card>
-
-          <!-- Vacation Days Card -->
-          <q-card class="col-xs-12 col-sm-6 col-md-4">
-            <q-card-section>
-              <div class="text-subtitle2 text-weight-bold q-mb-sm">Días de Vacaciones</div>
-              <div class="text-h4 text-primary">{{ benStore.benefits.vacationDays }}</div>
-              <p class="text-caption text-grey-6 q-mt-md">días hábiles por año</p>
-            </q-card-section>
-          </q-card>
-
-          <!-- Pension Plan Card -->
-          <q-card class="col-xs-12 col-sm-6 col-md-4">
-            <q-card-section>
-              <div class="text-subtitle2 text-weight-bold q-mb-sm">Plan de Pensiones</div>
-              <div class="text-body1 text-primary">{{ benStore.benefits.pensionPlan }}</div>
-              <p class="text-caption text-grey-6 q-mt-md">seguridad en el retiro</p>
-            </q-card-section>
-          </q-card>
-
-          <!-- Bonus Structure Card -->
-          <q-card class="col-xs-12 col-sm-6 col-md-4">
-            <q-card-section>
-              <div class="text-subtitle2 text-weight-bold q-mb-sm">Estructura de Bonificación</div>
-              <div class="text-body1 text-primary">{{ benStore.benefits.bonusStructure }}</div>
-              <p class="text-caption text-grey-6 q-mt-md">incentivos por desempeño</p>
-            </q-card-section>
-          </q-card>
+          <div v-for="beneficio in beneficios" :key="beneficio.id" class="col-xs-12 col-md-6">
+            <q-card>
+              <q-card-section>
+                <div class="flex items-center q-mb-md">
+                  <q-icon :name="beneficio.icono" size="32px" color="primary" />
+                  <div class="q-ml-md">
+                    <div class="text-h6">{{ beneficio.nombre }}</div>
+                    <div class="text-caption text-grey-7">{{ beneficio.descripcion }}</div>
+                  </div>
+                </div>
+              </q-card-section>
+            </q-card>
+          </div>
         </div>
+      </q-tab-panel>
 
-        <!-- Additional Benefits -->
-        <q-card flat class="q-mt-lg">
+      <q-tab-panel name="compensacion">
+        <q-card>
           <q-card-section>
-            <div class="text-h6 q-mb-md">Beneficios Adicionales</div>
-            <div class="q-gutter-md">
-              <div v-for="benefit in benStore.benefits.additionalBenefits" :key="benefit" class="row items-center">
-                <q-icon name="check_circle" color="positive" size="md" class="q-mr-md" />
-                <span>{{ benefit }}</span>
-              </div>
-            </div>
+            <div class="text-h6 q-mb-lg">Estructura de Compensación</div>
+            <q-list separator>
+              <q-item v-for="item in compensacion" :key="item.id">
+                <q-item-section>
+                  <q-item-label>{{ item.concepto }}</q-item-label>
+                </q-item-section>
+                <q-item-section side top>
+                  <q-item-label class="text-weight-bold">{{ item.monto }}</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item>
+                <q-item-section>
+                  <q-item-label class="text-h6">Total Anual</q-item-label>
+                </q-item-section>
+                <q-item-section side top>
+                  <q-item-label class="text-h6 text-weight-bold text-positive">{{ totalAnual }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
           </q-card-section>
         </q-card>
       </q-tab-panel>
 
-      <!-- Exit Survey Tab -->
-      <q-tab-panel name="exit-survey">
-        <q-card flat class="q-mb-lg bg-warning text-white">
+      <q-tab-panel name="encuesta">
+        <q-card>
           <q-card-section>
-            <div class="text-h6">Encuesta de Salida</div>
-            <p class="q-mt-md">
-              Te agradecemos por tu tiempo con nosotros. Tu retroalimentación es valiosa para mejorar.
+            <div class="text-h6 q-mb-md">Encuesta de Salida</div>
+            <p class="text-grey-7 q-mb-lg">
+              Tu retroalimentación es importante. Por favor completa esta encuesta antes de irte.
             </p>
-          </q-card-section>
-        </q-card>
-
-        <q-card flat>
-          <q-card-section>
-            <div class="q-gutter-lg">
-              <!-- Reason for leaving -->
-              <div>
-                <label class="text-subtitle1 text-weight-bold">¿Cuál es tu motivo de salida?</label>
-                <q-select
-                  v-model="surveyData.reason"
-                  :options="exitReasons"
-                  filled
-                  class="q-mt-md"
-                />
-              </div>
-
-              <!-- General Feedback -->
-              <div>
-                <label class="text-subtitle1 text-weight-bold">Retroalimentación General</label>
-                <q-input
-                  v-model="surveyData.feedback"
-                  type="textarea"
-                  rows="5"
-                  filled
-                  label="Cuéntanos tu experiencia en la empresa"
-                  class="q-mt-md"
-                />
-              </div>
-
-              <!-- Would Recommend -->
-              <div>
-                <label class="text-subtitle1 text-weight-bold">¿Recomendarías trabajar en nuestra empresa?</label>
-                <div class="q-mt-md row q-gutter-md">
-                  <q-option-group
-                    v-model="surveyData.wouldRecommend"
-                    :options="recommendOptions"
-                    color="primary"
-                    inline
-                  />
-                </div>
-              </div>
-
-              <!-- Suggestions -->
-              <div>
-                <label class="text-subtitle1 text-weight-bold">Sugerencias de Mejora</label>
-                <q-input
-                  v-model="surveyData.suggestions"
-                  type="textarea"
-                  rows="5"
-                  filled
-                  label="¿Qué podríamos mejorar?"
-                  class="q-mt-md"
-                />
-              </div>
-
-              <!-- Submit Button -->
-              <q-btn
-                color="primary"
-                label="Enviar Encuesta"
-                size="lg"
-                @click="submitSurvey"
-                :loading="benStore.loading"
-                class="full-width"
+            <q-form @submit="enviarEncuesta" class="q-gutter-md">
+              <q-select
+                v-model="encuesta.razonSalida"
+                label="Razón de salida"
+                outlined
+                :options="[
+                  'Mejor oportunidad laboral',
+                  'Salario',
+                  'Crecimiento profesional',
+                  'Ambiente laboral',
+                  'Relocalización',
+                  'Otro',
+                ]"
               />
-            </div>
+              <q-select
+                v-model="encuesta.experiencia"
+                label="¿Cómo fue tu experiencia?"
+                outlined
+                :options="['Excelente', 'Buena', 'Regular', 'Mala']"
+              />
+              <q-input
+                v-model="encuesta.comentarios"
+                label="Comentarios y sugerencias"
+                outlined
+                type="textarea"
+                rows="5"
+              />
+              <div class="row q-gutter-md">
+                <q-btn label="Enviar" type="submit" color="positive" />
+                <q-btn label="Cancelar" color="grey-7" @click="tabActual = 'beneficios'" />
+              </div>
+            </q-form>
           </q-card-section>
         </q-card>
       </q-tab-panel>
@@ -158,76 +106,72 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { useBenefitsStore } from 'src/stores/benefits'
 
 const $q = useQuasar()
-const benStore = useBenefitsStore()
 
-// Data
-const activeTab = ref('benefits')
-const exitReasons = ref([
-  'Nueva oportunidad laboral',
-  'Mejora salarial',
-  'Cambio de carrera',
-  'Razones personales',
-  'Reubicación',
-  'Otro',
+const tabActual = ref('beneficios')
+
+const beneficios = ref([
+  {
+    id: 1,
+    nombre: 'Seguro de Salud',
+    descripcion: 'Cobertura médica para ti y tu familia',
+    icono: 'health_and_safety',
+  },
+  {
+    id: 2,
+    nombre: 'AFP',
+    descripcion: 'Plan de pensiones aportado',
+    icono: 'trending_up',
+  },
+  {
+    id: 3,
+    nombre: 'Bonificación Anual',
+    descripcion: 'Bono de desempeño anual',
+    icono: 'card_giftcard',
+  },
+  {
+    id: 4,
+    nombre: 'Capacitación',
+    descripcion: 'Acceso a cursos y certificaciones',
+    icono: 'school',
+  },
 ])
 
-const recommendOptions = ref([
-  { label: 'Sí, definitivamente', value: true },
-  { label: 'Probablemente', value: 'maybe' },
-  { label: 'No', value: false },
+const compensacion = ref([
+  { id: 1, concepto: 'Salario Base', monto: 'S/. 50,000' },
+  { id: 2, concepto: 'Bonificación Anual', monto: 'S/. 10,000' },
+  { id: 3, concepto: 'Aguinaldo', monto: 'S/. 8,333' },
+  { id: 4, concepto: 'Beneficio Legal', monto: 'S/. 6,667' },
 ])
 
-const surveyData = ref({
-  reason: '',
-  feedback: '',
-  wouldRecommend: null,
-  suggestions: '',
+const totalAnual = 'S/. 75,000'
+
+const encuesta = ref({
+  razonSalida: '',
+  experiencia: '',
+  comentarios: '',
 })
 
-// Methods
-const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency: 'EUR',
-  }).format(amount || 0)
-}
-
-const submitSurvey = async () => {
-  if (!surveyData.value.reason) {
-    $q.notify({
-      type: 'warning',
-      message: 'Por favor selecciona un motivo de salida',
-    })
-    return
-  }
-
-  const result = await benStore.submitExitSurvey(surveyData.value)
-  if (result.success) {
+const enviarEncuesta = () => {
+  $q.dialog({
+    title: 'Confirmar envío',
+    message: '¿Deseas enviar la encuesta de salida?',
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
     $q.notify({
       type: 'positive',
       message: 'Encuesta enviada correctamente',
     })
-    surveyData.value = {
-      reason: '',
-      feedback: '',
-      wouldRecommend: null,
-      suggestions: '',
+    encuesta.value = {
+      razonSalida: '',
+      experiencia: '',
+      comentarios: '',
     }
-  } else {
-    $q.notify({
-      type: 'negative',
-      message: result.error,
-    })
-  }
+    tabActual.value = 'beneficios'
+  })
 }
-
-// Lifecycle
-onMounted(async () => {
-  await benStore.fetchBenefits()
-})
 </script>

@@ -2,20 +2,60 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
-
-        <q-toolbar-title> Quasar App </q-toolbar-title>
-
+        <q-toolbar-title> HUB de Capacitación </q-toolbar-title>
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
-        <q-item-label header> Essential Links </q-item-label>
+    <q-drawer
+      show-if-above
+      :width="200"
+      :breakpoint="500"
+      side="left"
+      class="bg-white text-dark shadow-1"
+    >
+      <div class="q-pa-md text-h6 text-weight-bold">
+        <q-icon name="apartment" size="sm" color="green-7" class="q-mr-sm" />
+        HUB de Capacitación
+      </div>
 
-        <EssentialLink v-for="link in linksList" :key="link.title" v-bind="link" />
+      <q-list class="q-pt-md">
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/">
+          <q-item-section avatar><q-icon name="home" /></q-item-section>
+          <q-item-section>Inicio</q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/mi-perfil-dashboard">
+          <q-item-section avatar><q-icon name="person" /></q-item-section>
+          <q-item-section>Mi Perfil</q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/progreso-cursos">
+          <q-item-section avatar><q-icon name="school" /></q-item-section>
+          <q-item-section>Mis Cursos</q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-green-2" class="bg-green-1 text-green-7 text-weight-bold" to="/catalogo-cursos">
+          <q-item-section avatar><q-icon name="menu_book" /></q-item-section>
+          <q-item-section>Catálogo de Cursos</q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/encuesta-salida">
+          <q-item-section avatar><q-icon name="poll" /></q-item-section>
+          <q-item-section>Encuesta Salida</q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/gestionar-perfil-colaborador">
+          <q-item-section avatar><q-icon name="edit" /></q-item-section>
+          <q-item-section>Gestión RR.HH.</q-item-section>
+        </q-item>
+
       </q-list>
+
+       <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="absolute-bottom q-mb-md">
+          <q-item-section avatar><q-icon name="tune" /></q-item-section>
+          <q-item-section>Ajustes</q-item-section>
+        </q-item>
     </q-drawer>
 
     <q-page-container>
@@ -25,57 +65,5 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev',
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework',
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev',
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev',
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev',
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev',
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev',
-  },
-]
-
-const leftDrawerOpen = ref(false)
-
-function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value
-}
+// No se necesita lógica aquí
 </script>

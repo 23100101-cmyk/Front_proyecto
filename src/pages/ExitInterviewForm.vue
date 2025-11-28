@@ -1,169 +1,116 @@
 <template>
-  <q-layout view="lHh LpR fff" class="bg-dark text-white">
+  <q-page class="q-pa-xl">
+    <div class="row justify-center">
+        <div class="col-xs-12 col-md-8 col-lg-6">
+            <q-card flat class="bg-white shadow-2 q-pa-lg">
+                <div class="text-h4 text-weight-bold q-mb-md text-center text-red-7">Encuesta de Entrevista de Salida</div>
+                <div class="text-subtitle1 text-grey-7 q-mb-lg text-center">Tus comentarios son valiosos para nosotros. Por favor, sé honesto/a.</div>
 
-    <q-drawer
-      show-if-above
-      :width="200"
-      :breakpoint="500"
-      side="left"
-      class="bg-grey-10 text-white"
-    >
-      <div class="q-pa-md text-h6 text-weight-bold">
-        <q-icon name="apartment" size="sm" color="green-6" class="q-mr-sm" />
-        HUB de Capacitación
-      </div>
+                <q-form @submit="onSubmit" class="q-gutter-md">
 
-      <q-list class="q-pt-md">
-        <q-item clickable v-ripple exact active-class="text-green-6 bg-grey-9">
-          <q-item-section avatar><q-icon name="home" /></q-item-section>
-          <q-item-section>Inicio</q-item-section>
-        </q-item>
+                    <q-card-section>
+                        <div class="text-h6 q-mb-sm">1. ¿Cuál fue la principal razón de tu salida?</div>
+                        <q-select
+                            outlined
+                            v-model="formData.reason"
+                            :options="reasonOptions"
+                            label="Selecciona una razón"
+                            hint="Selección requerida"
+                            :rules="[val => !!val || 'Campo Requerido']"
+                        />
+                    </q-card-section>
 
-        <q-item clickable v-ripple exact active-class="text-green-6 bg-grey-9">
-          <q-item-section avatar><q-icon name="person" /></q-item-section>
-          <q-item-section>Mi Perfil</q-item-section>
-        </q-item>
+                    <q-card-section>
+                        <div class="text-h6 q-mb-sm">2. Evalúa tu satisfacción general con la empresa:</div>
+                        <q-rating
+                            v-model="formData.satisfaction"
+                            size="2em"
+                            color="red-5"
+                            icon="sentiment_satisfied_alt"
+                            icon-selected="sentiment_very_satisfied"
+                        />
+                    </q-card-section>
 
-        <q-item clickable v-ripple exact active-class="text-green-6 bg-grey-9">
-          <q-item-section avatar><q-icon name="school" /></q-item-section>
-          <q-item-section>Mis Cursos</q-item-section>
-        </q-item>
+                    <q-card-section>
+                        <div class="text-h6 q-mb-sm">3. ¿Recomendarías esta empresa a un amigo?</div>
+                        <q-option-group
+                            v-model="formData.recommend"
+                            :options="recommendOptions"
+                            color="red-5"
+                            type="radio"
+                        />
+                    </q-card-section>
 
-        <q-separator spaced="md" />
+                    <q-card-section>
+                        <div class="text-h6 q-mb-sm">4. ¿Qué áreas crees que la empresa podría mejorar?</div>
+                        <q-input
+                            outlined
+                            v-model="formData.improvementAreas"
+                            type="textarea"
+                            rows="3"
+                            placeholder="Escribe tus sugerencias aquí..."
+                        />
+                    </q-card-section>
 
-        <q-item clickable v-ripple exact active-class="text-green-6 bg-green-9">
-          <q-item-section avatar><q-icon name="poll" /></q-item-section>
-          <q-item-section>Encuesta Salida</q-item-section>
-        </q-item>
-
-        <q-item clickable v-ripple exact active-class="text-green-6 bg-green-9">
-          <q-item-section avatar><q-icon name="face" /></q-item-section>
-          <q-item-section>Mi Perfil</q-item-section>
-        </q-item>
-        <q-item clickable v-ripple exact active-class="text-green-6 bg-green-9">
-          <q-item-section avatar><q-icon name="poll" /></q-item-section>
-          <q-item-section>Encuesta Salida</q-item-section>
-        </q-item>
-
-      </q-list>
-    </q-drawer>
-
-    <q-header class="bg-grey-10 text-white">
-      <q-toolbar>
-        <q-space />
-        <q-btn flat dense icon="arrow_back" class="q-mr-md" />
-        <q-btn flat dense icon="edit" class="q-mr-md" />
-        <q-btn flat dense icon="person" class="q-mr-md" />
-        <q-btn flat dense icon="close" />
-      </q-toolbar>
-      <q-separator />
-    </q-header>
-
-    <q-page-container>
-      <q-page class="q-pa-xl">
-
-        <div class="text-h4 text-weight-bold">Encuesta de Salida (Exit Interview)</div>
-        <div class="text-subtitle1 text-grey-5 q-mb-xl">Ayúanos a entender tu decisión</div>
-
-        <div class="text-h6 text-weight-bold q-mb-md">Información General</div>
-        <div class="row q-col-gutter-md q-mb-lg">
-          <div class="col-xs-12 col-md-3">
-            <q-input dark outlined label="Nombre (Opcional)" />
-          </div>
-          <div class="col-xs-12 col-md-3">
-            <q-input dark outlined label="Departamento" />
-          </div>
-          <div class="col-xs-12 col-md-3">
-            <q-input dark outlined label="Departamento" />
-          </div>
-          <div class="col-xs-12 col-md-3">
-            <q-input dark outlined label="Último Día de Trabajo" />
-          </div>
+                    <q-card-actions align="center" class="q-pt-lg">
+                        <q-btn label="Enviar Encuesta" type="submit" color="red-7" size="lg" icon="send" class="q-px-xl"/>
+                    </q-card-actions>
+                </q-form>
+            </q-card>
         </div>
-
-        <div class="text-h6 text-weight-bold q-mb-md">Motivo de la Salida</div>
-        <div class="row q-col-gutter-lg q-mb-lg">
-          <div class="col-xs-12 col-md-4">
-            <q-radio dark v-model="exitReason" val="crecimiento" label="Oportunidad de Crecimiento" />
-            <q-radio dark v-model="exitReason" val="cultura" label="Cultura/Ambiente" />
-            <q-radio dark v-model="exitReason" val="otros" label="Otros (Compenpasados de (temp.lavolab))" />
-          </div>
-          <div class="col-xs-12 col-md-8">
-            <q-input dark outlined type="textarea" rows="2" label="Cultura/Ambiente" />
-          </div>
-        </div>
-
-        <div class="text-h6 text-weight-bold q-mb-md">Comentarios Adicionales</div>
-        <div class="row q-col-gutter-lg q-mb-lg">
-          <div class="col-xs-12 col-md-4">
-            <q-radio dark v-model="additionalComments" val="oportunidad" label="Oportunidad de" />
-            <q-radio dark v-model="additionalComments" val="cultura_ambiente" label="Cultura/Ambiente" />
-          </div>
-          <div class="col-xs-12 col-md-8">
-            <q-input dark outlined type="textarea" rows="2" />
-          </div>
-        </div>
-
-        <div class="text-h6 text-weight-bold q-mb-md">Experiencia en la Empresa</div>
-        <div class="row q-col-gutter-md">
-          <div class="col-12">
-            <q-item tag="label" dense>
-              <q-item-section>Satisfacción General</q-item-section>
-              <q-item-section side>
-                <q-rating v-model="satisfaction" max="5" size="lg" color="yellow-8" />
-              </q-item-section>
-            </q-item>
-          </div>
-          <div class="col-12">
-            <q-checkbox dark v-model="recommend" label="Recomendaría Empresa" />
-          </div>
-        </div>
-
-        <q-btn unelevated label="Enviar Formulario" color="primary" size="lg" class="q-mt-xl" @click="showSuccessModal = true" />
-
-      </q-page>
-    </q-page-container>
-
-    <q-dialog v-model="showSuccessModal">
-      <q-card class="q-pa-md text-center bg-dark text-white" style="width: 400px">
-        <q-card-section>
-          <q-icon name="check_circle" color="green-6" size="xl" />
-          <div class="text-h6 q-mt-md text-weight-bold">¡Formoulamo Enviado con Éxcto!</div>
-          <p class="q-mt-sm text-grey-4">Agrademos tu tiempo y tus comentatos. Te desiamos much exeto en uu futuro.</p>
-        </q-card-section>
-        <q-card-actions align="center">
-          <q-btn unelevated label="Cerrar" color="primary" @click="showSuccessModal = false" class="full-width" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-
-  </q-layout>
+    </div>
+  </q-page>
 </template>
 
 <script>
 import { ref } from 'vue'
+import { useQuasar } from 'quasar'
 
 export default {
   name: 'ExitInterviewForm',
   setup () {
-    // Definición de variables reactivas para el formulario
-    const exitReason = ref('crecimiento')
-    const additionalComments = ref('oportunidad')
-    const satisfaction = ref(4) // Rating de 4 estrellas por defecto
-    const recommend = ref(true) // Checkbox marcado por defecto
-    const showSuccessModal = ref(false)
+    const $q = useQuasar()
+
+    const formData = ref({
+      reason: null,
+      satisfaction: 3,
+      recommend: 'maybe',
+      improvementAreas: ''
+    })
+
+    const reasonOptions = [
+      'Mejor oportunidad salarial',
+      'Falta de oportunidades de crecimiento',
+      'Cambio de carrera/rol',
+      'Ambiente laboral',
+      'Otros'
+    ]
+
+    const recommendOptions = [
+        { label: 'Sí, definitivamente', value: 'yes' },
+        { label: 'Tal vez', value: 'maybe' },
+        { label: 'No', value: 'no' }
+    ]
+
+    const onSubmit = () => {
+      // Aquí se enviaría la data a un backend
+      $q.notify({
+        color: 'red-7',
+        textColor: 'white',
+        icon: 'check_circle',
+        message: '¡Encuesta de salida enviada con éxito!',
+        position: 'top'
+      })
+      // Opcional: limpiar formulario después de enviar
+      // formData.value = { reason: null, satisfaction: 3, recommend: 'maybe', improvementAreas: '' }
+    }
 
     return {
-      exitReason,
-      additionalComments,
-      satisfaction,
-      recommend,
-      showSuccessModal
+      formData,
+      reasonOptions,
+      recommendOptions,
+      onSubmit
     }
   }
 }
 </script>
-
-<style scoped>
-/* Estilos opcionales */
-</style>

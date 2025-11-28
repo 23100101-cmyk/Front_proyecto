@@ -1,129 +1,83 @@
 <template>
-  <q-layout view="lHh LpR fff" class="bg-dark text-white">
+  <q-page class="q-pa-xl">
+    <div class="text-h4 text-weight-bold q-mb-md">Explorar Cursos</div>
+    <div class="text-subtitle1 text-grey-7 q-mb-xl">Encuentra tu próxima certificación o habilidad.</div>
 
-    <q-drawer
-      show-if-above
-      :width="200"
-      :breakpoint="500"
-      side="left"
-      class="bg-grey-10 text-white"
-    >
-      <div class="q-pa-md text-h6 text-weight-bold">
-        <q-icon name="apartment" size="sm" color="green-6" class="q-mr-sm" />
-        HUB de Capacitación
-      </div>
-
-      <q-list class="q-pt-md">
-        <q-item clickable v-ripple exact active-class="text-green-6 bg-grey-9" class="q-pb-lg">
-          <q-item-section avatar><q-icon name="home" /></q-item-section>
-          <q-item-section>Inicio</q-item-section>
-        </q-item>
-        <q-item clickable v-ripple exact active-class="text-green-6 bg-grey-9" class="q-pb-lg">
-          <q-item-section avatar><q-icon name="person" /></q-item-section>
-          <q-item-section>Mi Perfil</q-item-section>
-        </q-item>
-        <q-item clickable v-ripple exact active-class="text-green-6 bg-grey-9" class="q-pb-lg">
-          <q-item-section avatar><q-icon name="school" /></q-item-section>
-          <q-item-section>Mis Cursos</q-item-section>
-        </q-item>
-
-        <q-separator spaced="md" />
-
-        <q-item clickable v-ripple exact active-class="text-green-6 bg-green-9" class="bg-green-7 text-white text-weight-bold">
-          <q-item-section avatar><q-icon name="menu_book" /></q-item-section>
-          <q-item-section>Catálogo de Cursos</q-item-section>
-        </q-item>
-      </q-list>
-
-       <q-item clickable v-ripple exact active-class="text-green-6 bg-grey-9" class="absolute-bottom q-mb-md">
-          <q-item-section avatar><q-icon name="tune" /></q-item-section>
-          <q-item-section>Ajustes</q-item-section>
-        </q-item>
-    </q-drawer>
-
-    <q-header class="bg-grey-10 text-white">
-      <q-toolbar>
-        <q-space />
-        <q-btn flat dense icon="arrow_back" class="q-mr-md" />
-        <q-btn flat dense icon="crop_square" class="q-mr-md" />
-        <q-avatar size="sm" class="q-mr-sm bg-blue-grey-2 text-black text-weight-bold">JA</q-avatar>
-        <q-btn flat dense icon="close" />
-      </q-toolbar>
-    </q-header>
-
-    <q-page-container>
-      <q-page class="q-pa-xl">
-
-        <div class="text-h4 text-weight-bold q-mb-sm">Catálogo de Curso</div>
-        <div class="text-subtitle1 text-grey-5 q-mb-lg">
-          Cursos relevantes para tu rol (Desarrollador Java) y plan de carrera (Arquitecto de Software).
-        </div>
-
-        <div class="row items-center q-mb-lg q-col-gutter-md">
-          <div class="col-xs-12 col-sm-6 col-md-4">
-            <q-input dark outlined placeholder="Buscar cursos, temas o tecnologías...">
-              <template v-slot:prepend>
-                <q-icon name="search" />
-              </template>
+    <div class="row q-col-gutter-md q-mb-xl items-center">
+        <div class="col-xs-12 col-md-4">
+            <q-input outlined v-model="searchText" label="Buscar por título o habilidad" dense>
+                <template v-slot:append><q-icon name="search" /></template>
             </q-input>
-          </div>
-          <div class="col-auto">
-            <q-btn unelevated label="Filtrar por Rol" icon="filter_alt" color="green-7" />
-          </div>
-          <div class="col-auto">
-            <q-btn flat label="Filtrar por Tema" icon="add" color="grey-5" />
-          </div>
         </div>
-
-        <div class="row q-col-gutter-lg">
-          <div v-for="course in courses" :key="course.id" class="col-xs-12 col-sm-6 col-md-4">
-            <q-card dark class="bg-grey-9 q-pa-md">
-              <div class="text-h6 text-weight-bold">{{ course.title }}</div>
-              <p class="text-caption text-grey-5 q-mt-sm">{{ course.description }}</p>
-              <div class="row justify-between items-center q-mt-md">
-                <div class="text-caption text-grey-5">{{ course.provider }}</div>
-                <div class="text-caption text-grey-5">Aprox. {{ course.duration }}</div>
-              </div>
-
-              <div class="row justify-between items-center q-mt-md">
-                <div class="text-caption text-weight-bold">
-                   <q-icon :name="course.icon" size="sm" :color="course.iconColor" class="q-mr-xs" />
-                   {{ course.providerName }}
-                </div>
-                <q-btn unelevated label="Ver Detalles" color="green-7" />
-              </div>
-            </q-card>
-          </div>
+         <div class="col-xs-12 col-md-3">
+            <q-select outlined v-model="selectedCategory" :options="categoryOptions" label="Categoría" dense clearable />
         </div>
+        <div class="col-xs-12 col-md-3">
+            <q-select outlined v-model="selectedType" :options="typeOptions" label="Tipo" dense clearable />
+        </div>
+        <div class="col-xs-12 col-md-2">
+            <q-btn unelevated label="Aplicar Filtros" color="primary" class="full-width" />
+        </div>
+    </div>
 
-      </q-page>
-    </q-page-container>
-  </q-layout>
+    <div class="row q-col-gutter-lg">
+      <div v-for="course in filteredCourses" :key="course.title" class="col-xs-12 col-sm-6 col-md-4">
+        <q-card flat class="bg-white shadow-2">
+          <q-img :src="course.img" height="150px" />
+
+          <q-card-section>
+            <div class="text-overline text-primary">{{ course.category }}</div>
+            <div class="text-h6 q-mt-sm">{{ course.title }}</div>
+            <div class="text-caption text-grey-7">{{ course.description }}</div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            <div class="row items-center q-gutter-sm q-mb-sm">
+              <q-icon name="schedule" size="xs" color="blue-grey-4" />
+              <div class="text-caption text-blue-grey-4">{{ course.time }}</div>
+            </div>
+            <div class="row items-center q-gutter-sm">
+                <q-icon name="star" size="xs" color="amber" />
+                <div class="text-caption text-grey-7">{{ course.rating }} ({{ course.reviews }} reseñas)</div>
+            </div>
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn flat label="Ver Detalles" color="primary" />
+            <q-btn unelevated label="Inscribirme" color="green-7" />
+          </q-card-actions>
+        </q-card>
+      </div>
+    </div>
+
+    <div v-if="filteredCourses.length === 0" class="text-center q-pa-xl text-h6 text-grey-6">
+        No se encontraron cursos con los filtros aplicados.
+    </div>
+  </q-page>
 </template>
 
-<script>
-import { ref } from 'vue'
+<script setup>
+import { ref, computed } from 'vue'
 
-export default {
-  name: 'CourseCatalog',
-  setup () {
-    // Datos simulados para las tarjetas
-    const courses = ref([
-      { id: 1, title: 'Desverolto con Spring Boot & Microservicios', description: 'Crea applications escalables con los patinos más demando.', provider: 'Udemy', duration: '24h', icon: 'mdi-school', iconColor: 'orange-8', providerName: 'udemy' },
-      { id: 2, title: 'Arquittetura de Software Orientate a Dominios (DDD)', description: 'Aprende a diseñar sistemas y mentenibles.', provider: 'Platzi', duration: '18h', icon: 'mdi-book-open-variant', iconColor: 'blue', providerName: 'Platzi-Udemy' },
-      { id: 3, title: 'COURESRA', description: 'Aprende a desrrila robustas y mentelaes.', provider: 'Coursera', duration: '20h', icon: 'mdi-alpha-c-circle-outline', iconColor: 'blue', providerName: 'Platzi' },
-      { id: 4, title: 'Cloud Computing con AWS: Nivel Profesional', description: 'Crea applications escalables con los patinos más demando.', provider: 'LinkedIn Learning', duration: '18h', icon: 'mdi-linkedin', iconColor: 'blue-5', providerName: 'linkedin Learning' },
-      { id: 5, title: 'Cloud Computing con AWS Profesional', description: 'Depoloja y gensiifria aplacions en la nube de Amazon.', provider: 'LinkedIn Learning', duration: '30h', icon: 'mdi-linkedin', iconColor: 'blue-5', providerName: 'LinkedIn Learning' },
-      { id: 6, title: 'Bases Datos NoSQL: MonGBOB & Cassodra', description: 'Explora alternativos a lo dattas relacionales.', provider: 'LinkedIn Learning', duration: '10h', icon: 'mdi-linkedin', iconColor: 'blue-5', providerName: 'LinkedIn Learning' },
-    ]);
+const searchText = ref('')
+const selectedCategory = ref(null)
+const selectedType = ref(null)
+const categoryOptions = ['Liderazgo', 'Ventas', 'Técnico', 'Habilidades Blandas']
+const typeOptions = ['Certificación', 'Curso Corto', 'Clase en Vivo']
 
-    return {
-      courses
-    }
-  }
-}
+const allCourses = ref([
+  { title: 'Gestión de Proyectos Ágil', description: 'Metodología Scrum y Kanban.', category: 'Técnico', type: 'Certificación', time: '40 horas', rating: 4.8, reviews: 150, img: 'https://cdn.quasar.dev/img/material.png' },
+  { title: 'Negociación Estratégica', description: 'Técnicas avanzadas de cierre.', category: 'Ventas', type: 'Curso Corto', time: '10 horas', rating: 4.5, reviews: 80, img: 'https://cdn.quasar.dev/img/parallax1.jpg' },
+  { title: 'Liderazgo Transformacional', description: 'Inspira y motiva a tu equipo.', category: 'Liderazgo', type: 'Certificación', time: '30 horas', rating: 4.9, reviews: 200, img: 'https://cdn.quasar.dev/img/parallax2.jpg' },
+  { title: 'Comunicación Asertiva', description: 'Claves para mensajes claros.', category: 'Habilidades Blandas', type: 'Clase en Vivo', time: '5 horas', rating: 4.7, reviews: 120, img: 'https://cdn.quasar.dev/img/mountains.jpg' },
+])
+
+const filteredCourses = computed(() => {
+    return allCourses.value.filter(course => {
+        const matchesSearch = !searchText.value || course.title.toLowerCase().includes(searchText.value.toLowerCase()) || course.description.toLowerCase().includes(searchText.value.toLowerCase())
+        const matchesCategory = !selectedCategory.value || course.category === selectedCategory.value
+        const matchesType = !selectedType.value || course.type === selectedType.value
+        return matchesSearch && matchesCategory && matchesType
+    })
+})
 </script>
-
-<style scoped>
-/* Añade estilos específicos aquí si son necesarios */
-</style>

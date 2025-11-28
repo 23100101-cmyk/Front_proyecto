@@ -4,6 +4,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
+      { path: 'dashboard', component: () => import('pages/DashboardPage.vue') },
       { path: 'perfil', component: () => import('pages/ProfilePage.vue') },
       { path: 'mi-perfil', component: () => import('pages/MyProfilePage.vue') },
       { path: 'oportunidades', component: () => import('pages/OpportunitiesPage.vue') },

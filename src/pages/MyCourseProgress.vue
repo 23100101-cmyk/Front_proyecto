@@ -2,66 +2,153 @@
   <q-page class="q-pa-xl">
     <div class="text-h4 text-weight-bold q-mb-sm">Mi Progreso en Cursos</div>
     <div class="text-subtitle1 text-grey-7 q-mb-lg">
-      Cursos relevantes para el rol (Desarrollador de Software).
+      Cursos en los que estás inscrito.
     </div>
 
     <div class="q-gutter-sm q-mb-xl">
-      <q-btn unelevated label="En Curso" color="green-7" />
-      <q-btn unelevated label="Completados" color="grey-6" />
+      <q-chip
+        v-for="status in ['En Curso', 'Completados']"
+        :key="status"
+        clickable
+        :color="filtroEstado === status ? 'primary' : 'grey-3'"
+        :text-color="filtroEstado === status ? 'white' : 'dark'"
+        @click="filtroEstado = status"
+      >
+        {{ status }}
+      </q-chip>
     </div>
 
-    <div class="row q-col-gutter-lg">
-      <div v-for="course in courses" :key="course.id" class="col-xs-12 col-sm-6 col-md-4">
+    <div v-if="loading" class="text-center q-my-lg">
+      <q-spinner size="50px" color="primary" />
+    </div>
+
+    <q-banner v-if="error" class="bg-negative text-white q-mb-lg">
+      {{ error }}
+      <template v-slot:action>
+        <q-btn flat dense icon="close" @click="error = null" />
+      </template>
+    </q-banner>
+
+    <div v-if="!loading && cursosFiltrados.length > 0" class="row q-col-gutter-lg">
+      <div v-for="course in cursosFiltrados" :key="course.id" class="col-xs-12 col-sm-6 col-md-4">
         <q-card class="bg-white q-pa-md shadow-3">
-          <div class="text-h6 text-weight-bold">{{ course.title }}</div>
-          <p class="text-caption text-grey-7 q-mt-sm">{{ course.description }}</p>
+          <div class="text-h6 text-weight-bold">{{ course.titulo }}</div>
+          <p class="text-caption text-grey-7 q-mt-sm">{{ course.descripcion }}</p>
           <div class="row justify-between items-center q-mt-md">
-            <div class="text-caption text-grey-7">{{ course.provider }}</div>
-            <div class="text-caption text-grey-7">Aprox. {{ course.duration }}</div>
+            <div class="text-caption text-grey-7">{{ course.proveedor }}</div>
+            <div class="text-caption text-grey-7">{{ course.duracionHoras }}h</div>
           </div>
 
           <div class="q-mt-md">
-            <div v-if="course.progress > 0 && course.progress < 100">
-              <q-linear-progress :value="course.progress / 100" color="green-7" track-color="grey-3" style="height: 8px;" />
+            <div v-if="course.porcentajeCompletado > 0">
+              <q-linear-progress :value="course.porcentajeCompletado / 100" color="green-7" track-color="grey-3" style="height: 8px;" />
               <div class="text-caption text-weight-bold q-mt-xs">
-                <q-icon :name="course.icon" size="sm" :color="course.iconColor" class="q-mr-xs" />
-                {{ course.providerName }} {{ course.progress }}% Completado
+                {{ course.porcentajeCompletado }}% Completado
               </div>
             </div>
             <div v-else>
-               <q-icon :name="course.icon" size="sm" :color="course.iconColor" class="q-mr-xs" />
-               <span class="text-caption text-weight-bold">{{ course.providerName }}</span>
+              <q-linear-progress :value="0" color="grey-3" track-color="grey-2" style="height: 8px;" />
+              <div class="text-caption text-weight-bold q-mt-xs text-grey-7">
+                Sin iniciar
+              </div>
             </div>
           </div>
 
           <div class="q-mt-md text-right">
-            <q-btn unelevated label="Ver Detalles" color="green-7" />
+            <q-btn
+              v-if="course.porcentajeCompletado < 100"
+              unelevated
+              label="Continuar"
+              color="green-7"
+              @click="marcarProgreso(course.id)"
+            />
+            <q-btn
+              v-else
+              unelevated
+              label="Completado"
+              color="positive"
+              disable
+            />
           </div>
 
         </q-card>
       </div>
     </div>
+
+    <q-card v-else-if="!loading" flat class="text-center q-pa-lg">
+      <q-icon name="school" size="60px" color="grey-5" />
+      <p class="text-grey-7 q-mt-md">No tienes cursos en esta categoría</p>
+    </q-card>
   </q-page>
 </template>
 
-<script>
-import { ref } from 'vue'
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useQuasar } from 'quasar'
+import { cursoService } from 'src/services/backend'
+import { useAuthStore } from 'src/stores/auth'
 
-export default {
-  name: 'MyCourseProgress',
-  setup () {
-    const courses = ref([
-      { id: 1, title: 'Desarrollo con Spring Boot y Microservicios', description: 'Crea aplicaciones escalables con los patrones más demandados del mercado.', provider: 'Udemy', duration: '24h', progress: 75, icon: 'mdi-school', iconColor: 'orange-8', providerName: 'Udemy' },
-      { id: 2, title: 'Arquitectura de Software Orientada a Dominios (DDD)', description: 'Aprende a diseñar sistemas robustos y fáciles de mantener.', provider: 'Platzi / Udemy', duration: '18h', progress: 0, icon: 'mdi-book-open-variant', iconColor: 'blue', providerName: 'Platzi-Udemy' },
-      { id: 3, title: 'Coursera: Desarrollo de Habilidades', description: 'Aprende a desarrollar soluciones robustas y con metodología.', provider: 'Coursera', duration: '20h', progress: 0, icon: 'mdi-alpha-c-circle-outline', iconColor: 'blue', providerName: 'Coursera' },
-      { id: 4, title: 'Cloud Computing con AWS: Nivel Profesional', description: 'Adquiere experiencia avanzada en la gestión de servicios Cloud de AWS.', provider: 'LinkedIn Learning', duration: '30h', progress: 30, icon: 'mdi-linkedin', iconColor: 'blue-5', providerName: 'LinkedIn Learning' },
-      { id: 5, title: 'Cloud Computing con AWS (Profesional)', description: 'Despliega y gestiona aplicaciones en la nube de Amazon.', provider: 'LinkedIn Learning', duration: '36h', progress: 0, icon: 'mdi-linkedin', iconColor: 'blue-5', providerName: 'LinkedIn Learning' },
-      { id: 6, title: 'Bases de Datos NoSQL: MongoDB y Cassandra', description: 'Explora alternativas a los modelos de datos relacionales tradicionales.', provider: 'LinkedIn Learning', duration: '16h', progress: 0, icon: 'mdi-linkedin', iconColor: 'blue-5', providerName: 'LinkedIn Learning' },
-    ]);
+const $q = useQuasar()
+const authStore = useAuthStore()
 
-    return {
-      courses
+const cursos = ref([])
+const loading = ref(false)
+const error = ref(null)
+const filtroEstado = ref('En Curso')
+
+const cursosFiltrados = computed(() => {
+  return cursos.value.filter(course => {
+    if (filtroEstado.value === 'En Curso') {
+      return course.porcentajeCompletado < 100
+    } else if (filtroEstado.value === 'Completados') {
+      return course.porcentajeCompletado === 100
     }
+    return true
+  })
+})
+
+onMounted(async () => {
+  if (authStore.isLoggedIn) {
+    await cargarCursos()
+  }
+})
+
+const cargarCursos = async () => {
+  try {
+    loading.value = true
+    error.value = null
+    const data = await cursoService.getAll()
+    cursos.value = data
+  } catch (err) {
+    error.value = 'Error al cargar los cursos'
+    console.error(err)
+  } finally {
+    loading.value = false
+  }
+}
+
+const marcarProgreso = async (cursoId) => {
+  try {
+    const colaboradorId = authStore.user?.id
+    if (!colaboradorId) {
+      $q.notify({
+        type: 'negative',
+        message: 'Usuario no identificado',
+      })
+      return
+    }
+    
+    await cursoService.completar(colaboradorId, cursoId)
+    $q.notify({
+      type: 'positive',
+      message: 'Progreso actualizado',
+    })
+    await cargarCursos()
+  } catch (err) {
+    $q.notify({
+      type: 'negative',
+      message: 'Error al actualizar el curso',
+    })
   }
 }
 </script>

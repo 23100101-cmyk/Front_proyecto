@@ -1,59 +1,19 @@
 <template>
-  <q-layout view="hHh Lpr lff">
-    <q-drawer show-if-above :width="80" :breakpoint="500" side="left" class="bg-grey-2">
-      <q-list class="q-pt-md text-grey-7">
-        <q-item clickable v-ripple exact active-class="text-primary bg-blue-1">
-          <q-item-section avatar>
-            <q-icon name="close" size="sm" class="cursor-pointer" />
-          </q-item-section>
-        </q-item>
+  <q-page>
+    <!-- Este archivo redirige a MyProfilePage que es la versión actualizada -->
+  </q-page>
+</template>
 
-        <q-item clickable v-ripple exact active-class="text-primary bg-blue-1">
-          <q-item-section avatar>
-            <q-icon name="home" />
-          </q-item-section>
-          <q-tooltip anchor="center right" self="center left" :offset="[10, 10]">Inicio</q-tooltip>
-        </q-item>
+<script setup>
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
-        <q-item clickable v-ripple exact active-class="text-primary bg-blue-1">
-          <q-item-section avatar>
-            <q-icon name="search" />
-          </q-item-section>
-          <q-tooltip anchor="center right" self="center left" :offset="[10, 10]">Buscar</q-tooltip>
-        </q-item>
+const router = useRouter()
 
-        <q-item clickable v-ripple exact active-class="text-primary bg-blue-1">
-          <q-item-section avatar>
-            <q-icon name="workspace_premium" />
-          </q-item-section>
-          <q-tooltip anchor="center right" self="center left" :offset="[10, 10]"
-            >Certificados</q-tooltip
-          >
-        </q-item>
-
-        <q-item clickable v-ripple exact active-class="text-primary bg-blue-1">
-          <q-item-section avatar>
-            <q-icon name="bookmark" />
-          </q-item-section>
-          <q-tooltip anchor="center right" self="center left" :offset="[10, 10]"
-            >Guardados</q-tooltip
-          >
-        </q-item>
-
-        <q-item clickable v-ripple exact active-class="text-primary bg-blue-1" class="q-mt-xl">
-          <q-item-section avatar>
-            <q-icon name="person" />
-          </q-item-section>
-          <q-tooltip anchor="center right" self="center left" :offset="[10, 10]"
-            >Mi perfil</q-tooltip
-          >
-        </q-item>
-      </q-list>
-    </q-drawer>
-
-    <q-page-container>
-      <q-page class="q-pa-md">
-        <div class="row q-col-gutter-md">
+onMounted(() => {
+  router.push('/mi-perfil')
+})
+</script>
           <div class="col-xs-12 col-md-8">
             <q-card flat bordered class="q-mb-md">
               <q-card-section class="row items-center q-pb-none">

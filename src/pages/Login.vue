@@ -13,26 +13,49 @@
         <q-card-section>
           <q-form @submit="onSubmit" class="q-gutter-md">
 
+            <!-- Error general del formulario -->
+            <q-banner v-if="auth.error" class="bg-negative text-white rounded-borders q-mb-md">
+              <template v-slot:avatar>
+                <q-icon name="error" />
+              </template>
+              {{ auth.error }}
+              <template v-slot:action>
+                <q-btn flat dense icon="close" @click="auth.clearError()" />
+              </template>
+            </q-banner>
+
+            <!-- Email/DNI -->
             <q-input
               v-model="formData.email"
               outlined
               label="Correo de Colaborador o DNI"
               type="text"
               lazy-rules
-              :rules="[val => (val && val.length > 0) || 'Por favor, ingresa tu usuario o DNI']"
+              :error="!!form.getFieldError('email')"
+              :error-message="form.getFieldError('email')"
+              @blur="form.handleBlur('email')"
+              @update:model-value="(val) => form.handleChange('email', val)"
+              :disable="auth.loading"
+              no-error-icon
             >
               <template v-slot:prepend>
                 <q-icon name="badge" />
               </template>
             </q-input>
 
+            <!-- Contraseña -->
             <q-input
               v-model="formData.password"
               outlined
               label="Contraseña"
               :type="isPwdVisible ? 'text' : 'password'"
               lazy-rules
-              :rules="[val => (val && val.length > 0) || 'Por favor, ingresa tu contraseña']"
+              :error="!!form.getFieldError('password')"
+              :error-message="form.getFieldError('password')"
+              @blur="form.handleBlur('password')"
+              @update:model-value="(val) => form.handleChange('password', val)"
+              :disable="auth.loading"
+              no-error-icon
             >
               <template v-slot:prepend>
                 <q-icon name="lock" />
@@ -46,17 +69,21 @@
               </template>
             </q-input>
 
+            <!-- Recordar contraseña -->
             <div class="text-right">
                 <a href="#" class="text-primary text-caption">¿Necesitas ayuda con tu acceso?</a>
             </div>
 
+            <!-- Botón submit -->
             <q-btn
               label="Iniciar Sesión"
               type="submit"
               color="green-7"
               size="lg"
               class="full-width q-mt-md"
-              :loading="loading"
+              :loading="auth.loading"
+              :disable="auth.loading"
+              icon-right="login"
             />
           </q-form>
         </q-card-section>
@@ -64,6 +91,9 @@
         <q-card-section class="text-center q-pt-none">
             <p class="text-caption text-grey-6">
                 © {{ new Date().getFullYear() }} HUB de Capacitación.
+            </p>
+            <p class="text-caption text-grey-6">
+                Versión 1.0 | Backend: {{ backendUrl }}
             </p>
         </q-card-section>
       </q-card>
@@ -75,60 +105,73 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
+import { useAuthStore } from 'src/stores/auth'
+import { useForm } from 'src/composables/useForm'
 
 export default {
   name: 'LoginPage',
   setup () {
     const $q = useQuasar()
     const router = useRouter()
+    const auth = useAuthStore()
 
+    const isPwdVisible = ref(false)
+    const backendUrl = ref(import.meta.env.VITE_API_URL || 'https://api.example.com')
+
+    // Inicializar formulario con validación
     const formData = ref({
-      email: '', // Usaremos este campo para el ID del colaborador (Correo o DNI)
+      email: '',
       password: ''
     })
-    const isPwdVisible = ref(false)
-    const loading = ref(false)
+
+    const form = useForm(
+      { email: '', password: '' },
+      async (values) => {
+        const result = await auth.login(values.email, values.password)
+        if (!result.success) {
+          throw new Error(result.error)
+        }
+        return result
+      }
+    )
 
     const onSubmit = async () => {
-      // 1. Validar campos (Quasar ya lo hace por medio de :rules, pero esta es la lógica de negocio)
-      if (!formData.value.email || !formData.value.password) {
-        return;
+      const validationRules = {
+        email: [
+          (val) => form.validators.required(val, 'Email/DNI'),
+          (val) => !val || val.length >= 3 || 'Debe ser un email o DNI válido'
+        ],
+        password: [
+          (val) => form.validators.required(val, 'Contraseña'),
+          form.validators.minLength(3)
+        ]
       }
 
-      loading.value = true
+      const submitHandler = form.handleSubmit(validationRules)
+      const result = await submitHandler()
 
-      // 2. Aquí es donde se conectará con tu Backend (usando Axios)
-      // ESTE CÓDIGO DEBE SER REEMPLAZADO POR LA LLAMADA AXIOS REAL A TU API DE AUTENTICACIÓN
-      await new Promise(resolve => setTimeout(resolve, 1500))
-
-      if (formData.value.email === 'colaborador@hub.com' && formData.value.password === '12345') {
-
-        // Simulación: Guardar el token de sesión o el estado de autenticación
-        sessionStorage.setItem('isAuthenticated', 'true')
-
+      if (result.success) {
         $q.notify({
           type: 'positive',
-          message: '¡Acceso Correcto! Redirigiendo al Dashboard...',
+          message: `¡Bienvenido ${auth.userDisplayName}!`,
+          position: 'top',
+          timeout: 1500
         })
 
-        // 3. Redirigir al dashboard principal del perfil
-        router.push('/mi-perfil-dashboard')
-
-      } else {
-        $q.notify({
-          type: 'negative',
-          message: 'Credenciales inválidas. Verifica tu usuario y contraseña.',
-        })
+        // Redirigir al dashboard después de 1.5 segundos
+        setTimeout(() => {
+          router.push('/mi-perfil-dashboard')
+        }, 500)
       }
-
-      loading.value = false
     }
 
     return {
       formData,
       isPwdVisible,
-      loading,
-      onSubmit
+      auth,
+      form,
+      onSubmit,
+      backendUrl
     }
   }
 }

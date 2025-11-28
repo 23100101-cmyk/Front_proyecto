@@ -5,23 +5,26 @@
       <div class="text-h4 text-weight-bold text-blue-grey-10">Dashboard Estratégico de Movilidad</div>
       <q-space />
       <div class="row items-center q-gutter-md">
-        <q-btn flat dense icon="sync" label="Actualizar Data" color="primary" />
-        <div class="text-subtitle1 text-grey-7">Fátima Rivasplata</div>
-        <q-avatar size="md"><img src="https://cdn.quasar.dev/img/avatar.png"></q-avatar>
+        <q-btn flat dense icon="sync" label="Actualizar" color="primary" @click="refreshData" :loading="loading" />
+        <q-btn flat dense icon="logout" label="Salir" color="negative" @click="handleLogout" />
+        <div class="text-subtitle1 text-grey-7">{{ auth.userDisplayName }}</div>
+        <q-avatar size="md" :color="auth.isLoggedIn ? 'primary' : 'grey-5'" text-color="white">
+          {{ auth.userInitials }}
+        </q-avatar>
       </div>
     </div>
 
     <div class="row q-col-gutter-lg q-mb-xl">
 
-      <div class="col-xs-12 col-md-4">
+          <div class="col-xs-12 col-md-4">
         <q-card flat class="q-pa-md bg-white shadow-3">
           <div class="text-overline text-grey-7">ESTADO DEL INVENTARIO</div>
           <div class="row items-end justify-between q-mt-xs q-mb-sm">
-            <div class="text-h5 text-weight-bolder text-green-7">85% Completado</div>
+            <div class="text-h5 text-weight-bolder text-green-7">{{ recommendedCourses.length }} / 10</div>
             <q-icon name="assignment_turned_in" color="green-7" size="md" />
           </div>
-          <q-linear-progress :value="0.85" color="green-7" track-color="grey-3" class="q-mb-sm" style="height: 8px;" />
-          <div class="text-caption text-grey-6">Actualizado hace 2 días. <span class="text-primary cursor-pointer">Revisar detalles.</span></div>
+          <q-linear-progress :value="recommendedCourses.length / 10" color="green-7" track-color="grey-3" class="q-mb-sm" style="height: 8px;" />
+          <div class="text-caption text-grey-6">Recomendaciones actualizadas. <span class="text-primary cursor-pointer" @click="refreshData">Revisar detalles.</span></div>
         </q-card>
       </div>
 
@@ -115,21 +118,92 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
+import { useAuthStore } from 'src/stores/auth'
+import { userService, courseService } from 'src/services/api'
 
 const router = useRouter()
+const $q = useQuasar()
+const auth = useAuthStore()
 
-// Datos simulados (más elaborados)
-const recommendedCourses = ref([
-    { title: 'Liderazgo Situacional', icon: 'cast_for_education', reason: 'Cierre de Brecha: Liderazgo (Soft Skill) - Urgente' },
-    { title: 'Testing Unitario con Jest', icon: 'code', reason: 'Necesario para el 90% de las nuevas vacantes de Ingeniería.' },
-    { title: 'Com. Asertiva Avanzada', icon: 'forum', reason: 'Sugerido tras la revisión anual de competencias.' },
-])
+const recommendedCourses = ref([])
+const internalJobs = ref([])
+const loading = ref(true)
 
-const internalJobs = ref([
-    { title: 'Arquitecto de Soluciones', department: 'Innovación', matchScore: 78, missingSkills: 4 },
-    { title: 'Líder Técnico de Frontend', department: 'Ingeniería', matchScore: 92, missingSkills: 1 },
-    { title: 'Especialista en Datos', department: 'BI y Analytics', matchScore: 65, missingSkills: 6 },
-])
+// Cargar datos al montar
+onMounted(async () => {
+  try {
+    const [jobsRes, coursesRes] = await Promise.all([
+      userService.getAll({ limit: 5 }),
+      courseService.getAll({ limit: 5, recommended: true })
+    ])
+
+    internalJobs.value = jobsRes.data
+    recommendedCourses.value = coursesRes.data
+  } catch (error) {
+    console.error('Error cargando datos:', error)
+    $q.notify({
+      type: 'negative',
+      message: 'Error al cargar los datos del dashboard.',
+    })
+  } finally {
+    loading.value = false
+  }
+})
+
+// Actualizar datos
+const refreshData = async () => {
+  loading.value = true
+  try {
+    const [jobsRes, coursesRes] = await Promise.all([
+      userService.getAll({ limit: 5 }),
+      courseService.getAll({ limit: 5, recommended: true })
+    ])
+    internalJobs.value = jobsRes.data
+    recommendedCourses.value = coursesRes.data
+    $q.notify({
+      type: 'positive',
+      message: 'Datos actualizados correctamente.',
+      position: 'top',
+      timeout: 1500,
+    })
+  } catch (error) {
+    console.error('Error actualizando datos:', error)
+    $q.notify({
+      type: 'negative',
+      message: 'Error al actualizar datos.',
+    })
+  } finally {
+    loading.value = false
+  }
+}
+
+// Explorar vacante
+const exploreOpportunity = (jobId) => {
+  router.push(`/oportunidad/${jobId}`)
+}
+
+// Navegar a curso
+const goToCourse = (courseId) => {
+  router.push(`/catalogo-cursos`)
+}
+
+// Logout
+const handleLogout = () => {
+  $q.dialog({
+    title: 'Cerrar Sesión',
+    message: '¿Estás seguro de que quieres cerrar sesión?',
+    cancel: true,
+    persistent: true
+  }).onOk(() => {
+    auth.logout()
+    $q.notify({
+      type: 'positive',
+      message: 'Sesión cerrada correctamente.',
+    })
+    router.push('/login')
+  })
+}
 </script>

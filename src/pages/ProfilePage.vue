@@ -61,22 +61,22 @@
             <q-card flat bordered class="q-mb-md">
               <q-card-section class="row items-center q-pb-none">
                 <q-avatar size="100px">
-                  <img src="https://cdn.quasar.dev/img/avatar.png">
+                  <img :src="currentUser?.avatar || 'https://cdn.quasar.dev/img/avatar.png'">
                 </q-avatar>
                 <div class="q-ml-lg">
-                  <div class="text-h6 text-weight-bold">Fátima Rivasplata Núñez</div>
-                  <div class="text-caption text-grey-6">+ PERÚ</div>
+                  <div class="text-h6 text-weight-bold">{{ currentUser?.name || 'Usuario' }}</div>
+                  <div class="text-caption text-grey-6">{{ currentUser?.country || '+ PERÚ' }}</div>
                   <div class="row q-gutter-x-lg q-mt-sm text-center">
                     <div>
-                      <div class="text-subtitle1 text-weight-bold">5</div>
-                      <div class="text-caption text-grey-7">Mts</div>
+                      <div class="text-subtitle1 text-weight-bold">{{ currentUser?.coursesCompleted || 0 }}</div>
+                      <div class="text-caption text-grey-7">Cursos</div>
                     </div>
                     <div>
-                      <div class="text-subtitle1 text-weight-bold">2</div>
+                      <div class="text-subtitle1 text-weight-bold">{{ currentUser?.connections || 0 }}</div>
                       <div class="text-caption text-grey-7">Conexiones</div>
                     </div>
                     <div>
-                      <div class="text-subtitle1 text-weight-bold">30</div>
+                      <div class="text-subtitle1 text-weight-bold">{{ currentUser?.followers || 0 }}</div>
                       <div class="text-caption text-grey-7">Seguidores</div>
                     </div>
                   </div>
@@ -220,9 +220,43 @@
 </template>
 
 <script>
-// No se necesita lógica JS compleja para este prototipo estático.
+import { ref, onMounted } from 'vue'
+import { useQuasar } from 'quasar'
+import { userService } from 'src/services/api'
+
 export default {
-  name: 'ProfilePage'
+  name: 'ProfilePage',
+  setup() {
+    const $q = useQuasar()
+    const currentUser = ref(null)
+    const loading = ref(true)
+
+    onMounted(async () => {
+      try {
+        // Obtener perfil del usuario actual
+        const storedUser = localStorage.getItem('user')
+        if (storedUser) {
+          const user = JSON.parse(storedUser)
+          // Opcional: traer datos actualizados del backend
+          const response = await userService.getProfile(user.id)
+          currentUser.value = response.data
+        }
+      } catch (error) {
+        console.error('Error al cargar perfil:', error)
+        $q.notify({
+          type: 'negative',
+          message: 'Error al cargar el perfil.',
+        })
+      } finally {
+        loading.value = false
+      }
+    })
+
+    return {
+      currentUser,
+      loading
+    }
+  }
 }
 </script>
 

@@ -1,12 +1,14 @@
 ## Guía de Integración Backend - Quasar (VITE)
 
 ### Puerto de Desarrollo
+
 - **Frontend (Quasar):** `http://localhost:9000`
 - **Backend:** `https://localhost:5001` (configurable en `.env.local`)
 
 ### Archivos Principales Creados/Modificados
 
 #### 1. `src/boot/axios.js`
+
 - Configura axios con `VITE_API_URL` como `baseURL`
 - Incluye interceptores para:
   - **Errores globales:** manejo de 401, 403, 500
@@ -14,6 +16,7 @@
   - **Logging:** muestra errores en consola
 
 **Cómo habilitar token de autenticación:**
+
 ```javascript
 // En src/boot/axios.js, descomentar:
 api.interceptors.request.use(
@@ -24,33 +27,40 @@ api.interceptors.request.use(
     }
     return config
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 )
 ```
 
 #### 2. `.env.local`
+
 ```env
 VITE_API_URL=https://localhost:5001
 ```
+
 - Usa este archivo para desarrollo local
 - Reinicia `npm run dev` después de cambiar variables de entorno
 
 #### 3. `.env`
+
 ```env
 VITE_API_URL=https://api.example.com
 ```
+
 - URL de fallback para producción o si `.env.local` no existe
 
 #### 4. `src/services/api.js`
+
 Servicios centralizados organizados por recurso:
 
 **authService:**
+
 - `login(username, password)` → POST `/auth/login`
 - `logout()` → POST `/auth/logout`
 - `register(userData)` → POST `/auth/register`
 - `getCurrentUser()` → GET `/auth/me`
 
 **userService:**
+
 - `getAll(params)` → GET `/users`
 - `getById(id)` → GET `/users/{id}`
 - `create(userData)` → POST `/users`
@@ -60,6 +70,7 @@ Servicios centralizados organizados por recurso:
 - `updateProfile(id, profileData)` → PUT `/users/{id}/profile`
 
 **courseService:**
+
 - `getAll(params)` → GET `/courses`
 - `getById(id)` → GET `/courses/{id}`
 - `create(courseData)` → POST `/courses`
@@ -67,15 +78,18 @@ Servicios centralizados organizados por recurso:
 - `getProgress(courseId)` → GET `/courses/{courseId}/progress`
 
 **skillService:**
+
 - `getAll(params)` → GET `/skills`
 - `getUserSkills(userId)` → GET `/users/{userId}/skills`
 - `updateUserSkill(userId, skillId, level)` → PUT `/users/{userId}/skills/{skillId}`
 - `matchSkills(skillIds)` → POST `/skills/match`
 
 **healthService:**
+
 - `check()` → GET `/health` (verifica que el backend está en línea)
 
 **apiService:** Métodos genéricos
+
 - `get(endpoint, config)` → GET
 - `post(endpoint, data, config)` → POST
 - `put(endpoint, data, config)` → PUT
@@ -88,6 +102,7 @@ Servicios centralizados organizados por recurso:
 ### Cómo Usar en Componentes
 
 #### **Opción 1: Composition API (Recomendado)**
+
 ```vue
 <template>
   <div>
@@ -124,6 +139,7 @@ const fetchUsers = async () => {
 ```
 
 #### **Opción 2: Options API (antiguo pero válido)**
+
 ```vue
 <script>
 export default {
@@ -132,19 +148,21 @@ export default {
   },
   methods: {
     fetchUsers() {
-      this.$api.get('/users')
-        .then(res => this.users = res.data)
-        .catch(err => console.error(err))
-    }
+      this.$api
+        .get('/users')
+        .then((res) => (this.users = res.data))
+        .catch((err) => console.error(err))
+    },
   },
   mounted() {
     this.fetchUsers()
-  }
+  },
 }
 </script>
 ```
 
 #### **Opción 3: Importar servicio directamente**
+
 ```javascript
 import { userService } from 'src/services/api'
 
@@ -163,6 +181,7 @@ async function loadUsers() {
 ### Manejo de Autenticación (con Pinia)
 
 #### **Crear store de autenticación:**
+
 ```javascript
 // stores/auth.js
 import { defineStore } from 'pinia'
@@ -201,6 +220,7 @@ export const useAuthStore = defineStore('auth', {
 ```
 
 #### **Usar en componente:**
+
 ```vue
 <script setup>
 import { useAuthStore } from 'stores/auth'
@@ -223,12 +243,14 @@ const handleLogin = async () => {
 ### Problemas Comunes
 
 #### **Error: "Failed to connect to localhost:5001"**
+
 - El backend no está ejecutándose. Asegúrate de:
   1. Tener el backend en ejecución en `https://localhost:5001`
   2. Que el certificado HTTPS sea válido o aceptar excepciones en el navegador
   3. Habilitar CORS en el backend para `http://localhost:9000`
 
 #### **Error: "Certificate verification failed"**
+
 - Para desarrollo local con certificado autofirmado:
   - En el navegador: ir a `https://localhost:5001` y aceptar la advertencia
   - O configurar axios para ignorar el certificado (solo desarrollo):
@@ -236,11 +258,12 @@ const handleLogin = async () => {
     import https from 'https'
     const api = axios.create({
       baseURL: import.meta.env.VITE_API_URL,
-      httpsAgent: new https.Agent({ rejectUnauthorized: false })
+      httpsAgent: new https.Agent({ rejectUnauthorized: false }),
     })
     ```
 
 #### **Error: "CORS policy"**
+
 - El backend debe tener CORS habilitado. Ejemplo en ASP.NET Core:
   ```csharp
   services.AddCors(options => {
@@ -260,7 +283,7 @@ const handleLogin = async () => {
 2. **Prueba de salud:** En DevTools → Console, ejecuta:
    ```javascript
    import { healthService } from 'src/services/api'
-   healthService.check().then(r => console.log(r.data))
+   healthService.check().then((r) => console.log(r.data))
    ```
 3. **Implementar login:** Usa `authService.login()` en tu página de login
 4. **Adaptar endpoints:** Modifica `src/services/api.js` según tus rutas reales del backend

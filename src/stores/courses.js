@@ -17,8 +17,9 @@ export const useCourseStore = defineStore('courses', () => {
 
   // Computed
   const filteredCourses = computed(() => {
-    return courses.value.filter(course => {
-      const matchesSearch = !searchQuery.value ||
+    return courses.value.filter((course) => {
+      const matchesSearch =
+        !searchQuery.value ||
         course.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
         course.description?.toLowerCase().includes(searchQuery.value.toLowerCase())
       const matchesCategory = !selectedCategory.value || course.category === selectedCategory.value
@@ -28,11 +29,11 @@ export const useCourseStore = defineStore('courses', () => {
   })
 
   const categories = computed(() => {
-    return [...new Set(courses.value.map(c => c.category))].filter(Boolean)
+    return [...new Set(courses.value.map((c) => c.category))].filter(Boolean)
   })
 
   const types = computed(() => {
-    return [...new Set(courses.value.map(c => c.type))].filter(Boolean)
+    return [...new Set(courses.value.map((c) => c.type))].filter(Boolean)
   })
 
   // Actions
@@ -72,7 +73,7 @@ export const useCourseStore = defineStore('courses', () => {
     try {
       const response = await courseService.enroll(courseId)
       // Agregar a lista de inscritos
-      if (!enrolledCourses.value.find(c => c.id === courseId)) {
+      if (!enrolledCourses.value.find((c) => c.id === courseId)) {
         enrolledCourses.value.push(response.data)
       }
       return { success: true, data: response.data }
@@ -89,7 +90,7 @@ export const useCourseStore = defineStore('courses', () => {
     error.value = null
     try {
       await courseService.delete(`/courses/${courseId}/unenroll`)
-      enrolledCourses.value = enrolledCourses.value.filter(c => c.id !== courseId)
+      enrolledCourses.value = enrolledCourses.value.filter((c) => c.id !== courseId)
       return { success: true }
     } catch (err) {
       error.value = err.message

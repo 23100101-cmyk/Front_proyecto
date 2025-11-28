@@ -6,18 +6,19 @@ Este documento describe cómo se relacionan los datos del frontend con los endpo
 
 ### 📋 Resumen de Conexiones
 
-| Página | Componente | Datos Mostrados | Endpoint Backend | Servicio |
-|--------|-----------|-----------------|-----------------|----------|
-| Login | `Login.vue` | Validación de credenciales | `POST /auth/login` | `authService.login()` |
-| Dashboard | `IndexPage.vue` | Usuario, trabajos, cursos recomendados | `GET /users`, `GET /courses?recommended=true` | `userService`, `courseService` |
-| Catálogo | `CourseCatalog.vue` | Lista de cursos filtrados | `GET /courses` | `courseService.getAll()` |
-| Perfil | `ProfilePage.vue` | Datos del usuario y estadísticas | `GET /users/{id}/profile` | `userService.getProfile()` |
+| Página    | Componente          | Datos Mostrados                        | Endpoint Backend                              | Servicio                       |
+| --------- | ------------------- | -------------------------------------- | --------------------------------------------- | ------------------------------ |
+| Login     | `Login.vue`         | Validación de credenciales             | `POST /auth/login`                            | `authService.login()`          |
+| Dashboard | `IndexPage.vue`     | Usuario, trabajos, cursos recomendados | `GET /users`, `GET /courses?recommended=true` | `userService`, `courseService` |
+| Catálogo  | `CourseCatalog.vue` | Lista de cursos filtrados              | `GET /courses`                                | `courseService.getAll()`       |
+| Perfil    | `ProfilePage.vue`   | Datos del usuario y estadísticas       | `GET /users/{id}/profile`                     | `userService.getProfile()`     |
 
 ---
 
 ### 🔌 Detalle de Endpoints y Mapeo
 
 #### 1. **Login.vue** → Autenticación
+
 ```
 Flujo:
 1. Usuario ingresa email/DNI y contraseña
@@ -44,6 +45,7 @@ Datos esperados en response.data:
 ---
 
 #### 2. **IndexPage.vue** → Dashboard Principal
+
 ```
 Flujo:
 1. Al montar el componente, se llama onMounted()
@@ -90,6 +92,7 @@ Datos esperados en response.data:
 ---
 
 #### 3. **CourseCatalog.vue** → Explorar Cursos
+
 ```
 Flujo:
 1. Al montar, onMounted() llama courseService.getAll()
@@ -129,6 +132,7 @@ Datos esperados en response.data:
 ---
 
 #### 4. **ProfilePage.vue** → Perfil del Usuario
+
 ```
 Flujo:
 1. Al montar, onMounted() obtiene el usuario de localStorage
@@ -167,17 +171,16 @@ Datos esperados en response.data (getProfile):
 1. **Login exitoso** → `localStorage.setItem('authToken', token)`
 
 2. **En cada petición** → Interceptor de axios adjunta el token:
+
 ```javascript
 // src/boot/axios.js (descomentar para activar)
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('authToken')
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('authToken')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
   }
-)
+  return config
+})
 ```
 
 3. **Si token expira (401)** → Interceptor detecta y puede:
@@ -218,7 +221,7 @@ const refreshData = async () => {
   try {
     const [jobsRes, coursesRes] = await Promise.all([
       userService.getAll({ limit: 3 }),
-      courseService.getAll({ limit: 3, recommended: true })
+      courseService.getAll({ limit: 3, recommended: true }),
     ])
     internalJobs.value = jobsRes.data
     recommendedCourses.value = coursesRes.data
@@ -235,12 +238,12 @@ const refreshData = async () => {
 
 ### ⚠️ Errores Comunes y Solución
 
-| Error | Causa | Solución |
-|-------|-------|----------|
-| "Cannot read property 'name' of null" | currentUser es null | Verificar que localStorage.getItem('user') retorna datos |
-| "404 Not Found" en /users | Endpoint no existe en backend | Ajustar ruta en src/services/api.js |
-| "401 Unauthorized" | Token expirado o no enviado | Verificar que el token se guarda y se adjunta en header |
-| "No se cargan cursos" | courseService.getAll() falla | Revisar respuesta en DevTools Network tab |
+| Error                                 | Causa                         | Solución                                                 |
+| ------------------------------------- | ----------------------------- | -------------------------------------------------------- |
+| "Cannot read property 'name' of null" | currentUser es null           | Verificar que localStorage.getItem('user') retorna datos |
+| "404 Not Found" en /users             | Endpoint no existe en backend | Ajustar ruta en src/services/api.js                      |
+| "401 Unauthorized"                    | Token expirado o no enviado   | Verificar que el token se guarda y se adjunta en header  |
+| "No se cargan cursos"                 | courseService.getAll() falla  | Revisar respuesta en DevTools Network tab                |
 
 ---
 
@@ -287,4 +290,3 @@ const refreshData = async () => {
    - Verificar que se cargan cursos
    - Intentar inscribirse a un curso
    - Ver perfil
-

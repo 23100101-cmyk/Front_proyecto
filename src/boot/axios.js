@@ -36,7 +36,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error)
-  }
+  },
 )
 
 // Interceptor de solicitud para agregar token de autenticación
@@ -48,7 +48,7 @@ api.interceptors.request.use(
     // }
     return config
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 )
 
 export default defineBoot(({ app }) => {

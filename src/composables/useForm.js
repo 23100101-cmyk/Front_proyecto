@@ -82,7 +82,7 @@ export const useForm = (initialValues = {}, onSubmit) => {
       e?.preventDefault?.()
 
       // Marcar todos como touched
-      Object.keys(values.value).forEach(key => {
+      Object.keys(values.value).forEach((key) => {
         touched.value[key] = true
       })
 
@@ -125,7 +125,7 @@ export const useForm = (initialValues = {}, onSubmit) => {
 
   // Computed para validar si el formulario es válido
   const isValid = computed(() => {
-    return Object.values(errors.value).every(error => !error)
+    return Object.values(errors.value).every((error) => !error)
   })
 
   return {

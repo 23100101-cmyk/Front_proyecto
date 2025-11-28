@@ -3,7 +3,9 @@
     <div class="row items-center q-mb-lg">
       <div>
         <div class="text-h4 text-weight-bold">Explorar Cursos</div>
-        <div class="text-subtitle1 text-grey-7">Encuentra tu próxima certificación o habilidad.</div>
+        <div class="text-subtitle1 text-grey-7">
+          Encuentra tu próxima certificación o habilidad.
+        </div>
       </div>
       <q-space />
       <q-btn
@@ -19,51 +21,51 @@
 
     <!-- Filtros -->
     <div class="row q-col-gutter-md q-mb-xl items-center">
-        <div class="col-xs-12 col-md-4">
-            <q-input
-              v-model="courseStore.searchQuery"
-              outlined
-              label="Buscar por título o habilidad"
-              dense
-              clearable
-              debounce="300"
-            >
-                <template v-slot:append><q-icon name="search" /></template>
-            </q-input>
-        </div>
-         <div class="col-xs-12 col-md-2">
-            <q-select
-              v-model="courseStore.selectedCategory"
-              :options="courseStore.categories"
-              outlined
-              label="Categoría"
-              dense
-              clearable
-              emit-value
-              map-options
-            />
-        </div>
-        <div class="col-xs-12 col-md-2">
-            <q-select
-              v-model="courseStore.selectedType"
-              :options="courseStore.types"
-              outlined
-              label="Tipo"
-              dense
-              clearable
-              emit-value
-              map-options
-            />
-        </div>
-        <div class="col-xs-12 col-md-2">
-            <q-btn
-              unelevated
-              label="Limpiar"
-              color="grey-7"
-              class="full-width"
-              @click="courseStore.clearFilters()"
-            />
-        </div>
+      <div class="col-xs-12 col-md-4">
+        <q-input
+          v-model="courseStore.searchQuery"
+          outlined
+          label="Buscar por título o habilidad"
+          dense
+          clearable
+          debounce="300"
+        >
+          <template v-slot:append><q-icon name="search" /></template>
+        </q-input>
+      </div>
+      <div class="col-xs-12 col-md-2">
+        <q-select
+          v-model="courseStore.selectedCategory"
+          :options="courseStore.categories"
+          outlined
+          label="Categoría"
+          dense
+          clearable
+          emit-value
+          map-options
+        />
+      </div>
+      <div class="col-xs-12 col-md-2">
+        <q-select
+          v-model="courseStore.selectedType"
+          :options="courseStore.types"
+          outlined
+          label="Tipo"
+          dense
+          clearable
+          emit-value
+          map-options
+        />
+      </div>
+      <div class="col-xs-12 col-md-2">
+        <q-btn
+          unelevated
+          label="Limpiar"
+          color="grey-7"
+          class="full-width"
+          @click="courseStore.clearFilters()"
+        />
+      </div>
     </div>
 
     <!-- Resumen de resultados -->
@@ -77,12 +79,19 @@
       <div class="q-mt-md">Cargando cursos...</div>
     </div>
 
-    <div v-else-if="courseStore.filteredCourses.length === 0" class="text-center q-pa-xl text-h6 text-grey-6">
-        No se encontraron cursos con los filtros aplicados.
+    <div
+      v-else-if="courseStore.filteredCourses.length === 0"
+      class="text-center q-pa-xl text-h6 text-grey-6"
+    >
+      No se encontraron cursos con los filtros aplicados.
     </div>
 
     <div v-else class="row q-col-gutter-lg">
-      <div v-for="course in courseStore.filteredCourses" :key="course.id" class="col-xs-12 col-sm-6 col-md-4">
+      <div
+        v-for="course in courseStore.filteredCourses"
+        :key="course.id"
+        class="col-xs-12 col-sm-6 col-md-4"
+      >
         <q-card flat class="bg-white shadow-2 column full-height">
           <q-img v-if="course.img" :src="course.img" height="150px" />
 
@@ -100,12 +109,12 @@
               <div class="text-caption text-blue-grey-4">{{ course.time }}</div>
             </div>
             <div class="row items-center q-gutter-sm">
-                <q-icon name="star" size="xs" color="amber" />
-                <div class="text-caption text-grey-7">{{ course.rating }} ({{ course.reviews }} reseñas)</div>
+              <q-icon name="star" size="xs" color="amber" />
+              <div class="text-caption text-grey-7">
+                {{ course.rating }} ({{ course.reviews }} reseñas)
+              </div>
             </div>
-            <div v-if="course.price" class="text-h6 text-primary q-mt-md">
-              ${{ course.price }}
-            </div>
+            <div v-if="course.price" class="text-h6 text-primary q-mt-md">${{ course.price }}</div>
           </q-card-section>
 
           <q-card-actions align="right">
@@ -125,7 +134,7 @@
 
     <!-- Dialog para detalles de curso -->
     <q-dialog v-model="showCourseDetail" position="bottom">
-      <q-card style="min-width: 400px; max-width: 600px;">
+      <q-card style="min-width: 400px; max-width: 600px">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">{{ selectedCourse?.title }}</div>
           <q-space />
@@ -200,7 +209,7 @@ onMounted(async () => {
 
 // Verificar si está inscrito
 const isEnrolled = (courseId) => {
-  return courseStore.enrolledCourses.some(c => c.id === courseId)
+  return courseStore.enrolledCourses.some((c) => c.id === courseId)
 }
 
 // Toggle inscription
@@ -212,8 +221,9 @@ const toggleEnroll = async (course) => {
         title: 'Desinscribirse',
         message: `¿Seguro que quieres desinscribirse de "${course.title}"?`,
         cancel: true,
-        persistent: true
-      }).onOk(() => resolve(true))
+        persistent: true,
+      })
+        .onOk(() => resolve(true))
         .onCancel(() => resolve(false))
     })
 

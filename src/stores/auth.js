@@ -19,7 +19,7 @@ export const useAuthStore = defineStore('auth', () => {
     if (!user.value?.name) return 'U'
     return user.value.name
       .split(' ')
-      .map(n => n[0])
+      .map((n) => n[0])
       .join('')
       .toUpperCase()
       .slice(0, 2)

@@ -1,9 +1,7 @@
 <template>
-  <q-page class="row items-center justify-center bg-grey-1" style="min-height: 100vh;">
-
+  <q-page class="row items-center justify-center bg-grey-1" style="min-height: 100vh">
     <div class="col-xs-12 col-sm-8 col-md-5 col-lg-4">
       <q-card class="q-pa-lg shadow-2">
-
         <q-card-section class="text-center">
           <q-icon name="apartment" size="xl" color="green-7" />
           <div class="text-h5 text-weight-bold q-mt-sm">Acceso al HUB de Capacitación</div>
@@ -12,7 +10,6 @@
 
         <q-card-section>
           <q-form @submit="onSubmit" class="q-gutter-md">
-
             <!-- Error general del formulario -->
             <q-banner v-if="auth.error" class="bg-negative text-white rounded-borders q-mb-md">
               <template v-slot:avatar>
@@ -71,7 +68,7 @@
 
             <!-- Recordar contraseña -->
             <div class="text-right">
-                <a href="#" class="text-primary text-caption">¿Necesitas ayuda con tu acceso?</a>
+              <a href="#" class="text-primary text-caption">¿Necesitas ayuda con tu acceso?</a>
             </div>
 
             <!-- Botón submit -->
@@ -89,12 +86,10 @@
         </q-card-section>
 
         <q-card-section class="text-center q-pt-none">
-            <p class="text-caption text-grey-6">
-                © {{ new Date().getFullYear() }} HUB de Capacitación.
-            </p>
-            <p class="text-caption text-grey-6">
-                Versión 1.0 | Backend: {{ backendUrl }}
-            </p>
+          <p class="text-caption text-grey-6">
+            © {{ new Date().getFullYear() }} HUB de Capacitación.
+          </p>
+          <p class="text-caption text-grey-6">Versión 1.0 | Backend: {{ backendUrl }}</p>
         </q-card-section>
       </q-card>
     </div>
@@ -110,7 +105,7 @@ import { useForm } from 'src/composables/useForm'
 
 export default {
   name: 'LoginPage',
-  setup () {
+  setup() {
     const $q = useQuasar()
     const router = useRouter()
     const auth = useAuthStore()
@@ -121,30 +116,27 @@ export default {
     // Inicializar formulario con validación
     const formData = ref({
       email: '',
-      password: ''
+      password: '',
     })
 
-    const form = useForm(
-      { email: '', password: '' },
-      async (values) => {
-        const result = await auth.login(values.email, values.password)
-        if (!result.success) {
-          throw new Error(result.error)
-        }
-        return result
+    const form = useForm({ email: '', password: '' }, async (values) => {
+      const result = await auth.login(values.email, values.password)
+      if (!result.success) {
+        throw new Error(result.error)
       }
-    )
+      return result
+    })
 
     const onSubmit = async () => {
       const validationRules = {
         email: [
           (val) => form.validators.required(val, 'Email/DNI'),
-          (val) => !val || val.length >= 3 || 'Debe ser un email o DNI válido'
+          (val) => !val || val.length >= 3 || 'Debe ser un email o DNI válido',
         ],
         password: [
           (val) => form.validators.required(val, 'Contraseña'),
-          form.validators.minLength(3)
-        ]
+          form.validators.minLength(3),
+        ],
       }
 
       const submitHandler = form.handleSubmit(validationRules)
@@ -155,7 +147,7 @@ export default {
           type: 'positive',
           message: `¡Bienvenido ${auth.userDisplayName}!`,
           position: 'top',
-          timeout: 1500
+          timeout: 1500,
         })
 
         // Redirigir al dashboard después de 1.5 segundos
@@ -171,8 +163,8 @@ export default {
       auth,
       form,
       onSubmit,
-      backendUrl
+      backendUrl,
     }
-  }
+  },
 }
 </script>

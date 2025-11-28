@@ -57,7 +57,7 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
   }
 
-  const updateProfile = async (profileData) => {
+  const updateProfile = async () => {
     loading.value = true
     error.value = null
     try {
@@ -65,12 +65,12 @@ export const useAuthStore = defineStore('auth', () => {
       // const response = await userService.updateProfile(user.value.id, profileData)
       // user.value = response.data
       // localStorage.setItem('user', JSON.stringify(user.value))
+      loading.value = false
       return { success: true }
     } catch (err) {
       error.value = err.message
-      return { success: false, error: error.value }
-    } finally {
       loading.value = false
+      return { success: false, error: error.value }
     }
   }
 

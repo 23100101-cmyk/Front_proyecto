@@ -257,16 +257,6 @@ const refreshData = async () => {
   }
 }
 
-// Explorar vacante
-const exploreOpportunity = (jobId) => {
-  router.push(`/oportunidad/${jobId}`)
-}
-
-// Navegar a curso
-const goToCourse = (courseId) => {
-  router.push(`/catalogo-cursos`)
-}
-
 // Logout
 const handleLogout = () => {
   $q.dialog({

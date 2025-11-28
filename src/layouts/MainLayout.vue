@@ -25,20 +25,37 @@
           <q-item-section>Inicio</q-item-section>
         </q-item>
 
-        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/mi-perfil-dashboard">
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/mi-perfil">
           <q-item-section avatar><q-icon name="person" /></q-item-section>
           <q-item-section>Mi Perfil</q-item-section>
         </q-item>
 
-        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/progreso-cursos">
-          <q-item-section avatar><q-icon name="school" /></q-item-section>
-          <q-item-section>Mis Cursos</q-item-section>
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/oportunidades">
+          <q-item-section avatar><q-icon name="work" /></q-item-section>
+          <q-item-section>Oportunidades</q-item-section>
         </q-item>
 
-        <q-item clickable v-ripple exact active-class="text-green-7 bg-green-2" class="bg-green-1 text-green-7 text-weight-bold" to="/catalogo-cursos">
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/catalogo-cursos">
           <q-item-section avatar><q-icon name="menu_book" /></q-item-section>
-          <q-item-section>Catálogo de Cursos</q-item-section>
+          <q-item-section>Catálogo Cursos</q-item-section>
         </q-item>
+
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/progreso-cursos">
+          <q-item-section avatar><q-icon name="school" /></q-item-section>
+          <q-item-section>Mi Progreso</q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/gamificacion">
+          <q-item-section avatar><q-icon name="star" /></q-item-section>
+          <q-item-section>Puntos & Logros</q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/beneficios">
+          <q-item-section avatar><q-icon name="card_giftcard" /></q-item-section>
+          <q-item-section>Beneficios</q-item-section>
+        </q-item>
+
+        <q-separator class="q-my-md" />
 
         <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/encuesta-salida">
           <q-item-section avatar><q-icon name="poll" /></q-item-section>

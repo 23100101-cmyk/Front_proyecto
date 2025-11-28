@@ -58,12 +58,12 @@ export const useCourseStore = defineStore('courses', () => {
     try {
       // const response = await courseService.getEnrolled()
       // enrolledCourses.value = response.data
+      loading.value = false
       return { success: true }
     } catch (err) {
       error.value = err.message
-      return { success: false }
-    } finally {
       loading.value = false
+      return { success: false }
     }
   }
 
@@ -76,12 +76,12 @@ export const useCourseStore = defineStore('courses', () => {
       if (!enrolledCourses.value.find((c) => c.id === courseId)) {
         enrolledCourses.value.push(response.data)
       }
+      loading.value = false
       return { success: true, data: response.data }
     } catch (err) {
       error.value = err.response?.data?.message || 'Error al inscribirse'
-      return { success: false, error: error.value }
-    } finally {
       loading.value = false
+      return { success: false, error: error.value }
     }
   }
 
@@ -91,12 +91,12 @@ export const useCourseStore = defineStore('courses', () => {
     try {
       await courseService.delete(`/courses/${courseId}/unenroll`)
       enrolledCourses.value = enrolledCourses.value.filter((c) => c.id !== courseId)
+      loading.value = false
       return { success: true }
     } catch (err) {
       error.value = err.message
-      return { success: false }
-    } finally {
       loading.value = false
+      return { success: false }
     }
   }
 

@@ -5,7 +5,7 @@
         <h1 class="text-h4 text-weight-bold">Oportunidades</h1>
         <p class="text-caption text-grey-7">Encuentra y postúlate a vacantes internas</p>
       </div>
-      <q-badge :label="`${aplicaciones.length} aplicaciones`" color="primary" />
+      <q-badge :label="`${vacanteStore.aplicaciones.length} aplicaciones`" color="primary" />
     </div>
 
     <q-card class="q-mb-lg">
@@ -24,18 +24,18 @@
       </q-card-section>
     </q-card>
 
-    <div v-if="loading" class="text-center q-my-lg">
+    <div v-if="vacanteStore.loading" class="text-center q-my-lg">
       <q-spinner size="50px" color="primary" />
     </div>
 
-    <q-banner v-if="error" class="bg-negative text-white q-mb-lg">
-      {{ error }}
+    <q-banner v-if="vacanteStore.error" class="bg-negative text-white q-mb-lg">
+      {{ vacanteStore.error }}
       <template v-slot:action>
-        <q-btn flat dense icon="close" @click="error = null" />
+        <q-btn flat dense icon="close" @click="vacanteStore.error = null" />
       </template>
     </q-banner>
 
-    <div v-if="!loading && vacantesFiltradas.length > 0">
+    <div v-if="!vacanteStore.loading && vacantesFiltradas.length > 0">
       <div class="row q-col-gutter-lg">
         <div v-for="vacante in vacantesFiltradas" :key="vacante.id" class="col-xs-12 col-md-6">
           <q-card class="cursor-pointer" @click="verDetalles(vacante)">
@@ -116,30 +116,36 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
+import { useVacanteStore } from 'src/stores/vacante'
+import { useAuthStore } from 'src/stores/auth'
 
 const $q = useQuasar()
+const vacanteStore = useVacanteStore()
+const authStore = useAuthStore()
 
-const vacantes = ref([
-  { id: 1, titulo: 'Senior Backend Developer', area: 'Tecnología', nivel: 'Senior', descripcion: 'Buscamos un desarrollador backend senior', requisitos: ['5+ años', 'Node.js', 'AWS'] },
-  { id: 2, titulo: 'Product Manager', area: 'Producto', nivel: 'Mid', descripcion: 'Gestiona el ciclo de vida de nuestros productos', requisitos: ['3+ años', 'Agile'] },
-])
-
-const aplicaciones = ref([])
 const busqueda = ref('')
 const filtroArea = ref('')
 const filtroNivel = ref('')
-const loading = ref(false)
-const error = ref(null)
 const showDetails = ref(false)
 const vacanteActual = ref(null)
 
-const areasUnicas = computed(() => [...new Set(vacantes.value.map((v) => v.area))])
+onMounted(async () => {
+  if (authStore.isLoggedIn) {
+    await vacanteStore.fetchVacantes()
+  }
+})
+
+const areasUnicas = computed(() => {
+  const areas = new Set(vacanteStore.vacantes.map((v) => v.area))
+  return Array.from(areas).filter(Boolean)
+})
 
 const vacantesFiltradas = computed(() => {
-  return vacantes.value.filter((v) => {
-    const matchBusqueda = v.titulo.toLowerCase().includes(busqueda.value.toLowerCase())
+  return vacanteStore.vacantes.filter((v) => {
+    const matchBusqueda = v.titulo.toLowerCase().includes(busqueda.value.toLowerCase()) ||
+      v.descripcion.toLowerCase().includes(busqueda.value.toLowerCase())
     const matchArea = !filtroArea.value || v.area === filtroArea.value
     const matchNivel = !filtroNivel.value || v.nivel === filtroNivel.value
     return matchBusqueda && matchArea && matchNivel
@@ -157,24 +163,32 @@ const aplicarVacante = (vacanteId) => {
     message: '¿Deseas postularte a esta vacante?',
     cancel: true,
     persistent: true,
-  }).onOk(() => {
-    if (!aplicaciones.value.find((a) => a.vacanteId === vacanteId)) {
-      aplicaciones.value.push({
-        id: Date.now(),
-        vacanteId,
-        estado: 'Postulado',
-        fecha: new Date().toLocaleDateString(),
-      })
+  }).onOk(async () => {
+    try {
+      const colaboradorId = authStore.user?.id
+      if (!colaboradorId) {
+        $q.notify({
+          type: 'negative',
+          message: 'Usuario no identificado',
+        })
+        return
+      }
+      await vacanteStore.aplicar(vacanteId, colaboradorId)
       showDetails.value = false
       $q.notify({
         type: 'positive',
         message: 'Postulación enviada correctamente',
+      })
+    } catch {
+      $q.notify({
+        type: 'negative',
+        message: 'Error al enviar la postulación',
       })
     }
   })
 }
 
 const yaAplicado = (vacanteId) => {
-  return aplicaciones.value.some((a) => a.vacanteId === vacanteId)
+  return vacanteStore.aplicaciones.some((a) => a.vacanteId === vacanteId)
 }
 </script>

@@ -42,22 +42,25 @@
     <q-card class="q-mt-lg">
       <q-card-section>
         <div class="text-h6 q-mb-md">Historial de Puntos</div>
-        <q-table :rows="historialPuntos" :columns="columnasHistorial" flat bordered row-key="id" />
+        <q-table :rows="colaboradorStore.puntosHistorial" :columns="columnasHistorial" flat bordered row-key="id" />
       </q-card-section>
     </q-card>
   </q-page>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useColaboradorStore } from 'src/stores/colaborador'
+import { useAuthStore } from 'src/stores/auth'
 
-const puntosTotales = ref(1250)
-const historialPuntos = ref([
-  { id: 1, evento: 'Perfil completado', puntos: 50, fecha: '2024-01-15' },
-  { id: 2, evento: 'Skill agregada', puntos: 20, fecha: '2024-01-14' },
-  { id: 3, evento: 'Postulación enviada', puntos: 10, fecha: '2024-01-13' },
-  { id: 4, evento: 'Certificación validada', puntos: 100, fecha: '2024-01-12' },
-])
+const colaboradorStore = useColaboradorStore()
+const authStore = useAuthStore()
+
+onMounted(async () => {
+  if (authStore.isLoggedIn) {
+    await colaboradorStore.fetchPuntos()
+  }
+})
 
 const logros = ref([
   { id: 1, nombre: 'Primer Paso', icono: 'done', color: 'positive' },
@@ -74,13 +77,15 @@ const columnasHistorial = [
 const puntosMesActual = computed(() => {
   const ahora = new Date()
   const mesActual = ahora.getMonth()
-  return historialPuntos.value
+  return (colaboradorStore.puntosHistorial || [])
     .filter((h) => {
       const fecha = new Date(h.fecha)
       return fecha.getMonth() === mesActual
     })
-    .reduce((sum, h) => sum + h.puntos, 0)
+    .reduce((sum, h) => sum + (h.puntos || 0), 0)
 })
+
+const puntosTotales = computed(() => colaboradorStore.puntos?.total || 0)
 </script>
 
 <style scoped>

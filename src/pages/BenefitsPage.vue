@@ -106,12 +106,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
+import { useColaboradorStore } from 'src/stores/colaborador'
+import { useAuthStore } from 'src/stores/auth'
+import { encuestaService } from 'src/services/backend'
 
 const $q = useQuasar()
+const colaboradorStore = useColaboradorStore()
+const authStore = useAuthStore()
 
 const tabActual = ref('beneficios')
+const loading = ref(false)
 
 const beneficios = ref([
   {
@@ -140,19 +146,16 @@ const beneficios = ref([
   },
 ])
 
-const compensacion = ref([
-  { id: 1, concepto: 'Salario Base', monto: 'S/. 50,000' },
-  { id: 2, concepto: 'Bonificación Anual', monto: 'S/. 10,000' },
-  { id: 3, concepto: 'Aguinaldo', monto: 'S/. 8,333' },
-  { id: 4, concepto: 'Beneficio Legal', monto: 'S/. 6,667' },
-])
-
-const totalAnual = 'S/. 75,000'
-
 const encuesta = ref({
   razonSalida: '',
   experiencia: '',
   comentarios: '',
+})
+
+onMounted(async () => {
+  if (authStore.isLoggedIn) {
+    await colaboradorStore.fetchBeneficios()
+  }
 })
 
 const enviarEncuesta = () => {
@@ -161,17 +164,36 @@ const enviarEncuesta = () => {
     message: '¿Deseas enviar la encuesta de salida?',
     cancel: true,
     persistent: true,
-  }).onOk(() => {
-    $q.notify({
-      type: 'positive',
-      message: 'Encuesta enviada correctamente',
-    })
-    encuesta.value = {
-      razonSalida: '',
-      experiencia: '',
-      comentarios: '',
+  }).onOk(async () => {
+    try {
+      loading.value = true
+      const colaboradorId = authStore.user?.id
+      if (!colaboradorId) {
+        $q.notify({
+          type: 'negative',
+          message: 'Usuario no identificado',
+        })
+        return
+      }
+      await encuestaService.crearEncuesta(colaboradorId, encuesta.value)
+      $q.notify({
+        type: 'positive',
+        message: 'Encuesta enviada correctamente',
+      })
+      encuesta.value = {
+        razonSalida: '',
+        experiencia: '',
+        comentarios: '',
+      }
+      tabActual.value = 'beneficios'
+    } catch {
+      $q.notify({
+        type: 'negative',
+        message: 'Error al enviar la encuesta',
+      })
+    } finally {
+      loading.value = false
     }
-    tabActual.value = 'beneficios'
   })
 }
 </script>

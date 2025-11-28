@@ -341,7 +341,7 @@ const guardarPerfil = async () => {
         error.value = result.error
       }
     }
-  } catch (err) {
+  } catch {
     error.value = 'Error al guardar el perfil'
   } finally {
     loading.value = false

@@ -33,5 +33,18 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   })
 
+  // Global guard: if route requiresAuth and there's no token, redirect to /login
+  Router.beforeEach((to, from, next) => {
+    const token = typeof localStorage !== 'undefined' ? localStorage.getItem('token') : null
+    // support both direct meta on the route or meta on any matched record
+    const requiresAuth = !!(to.meta && to.meta.requiresAuth) || to.matched.some((rec) => rec.meta && rec.meta.requiresAuth)
+
+    if (requiresAuth && !token) {
+      next('/login')
+    } else {
+      next()
+    }
+  })
+
   return Router
 })

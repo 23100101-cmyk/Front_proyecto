@@ -174,7 +174,7 @@ const onSubmit = async () => {
     })
 
     setTimeout(() => {
-      router.push('/mi-perfil-dashboard')
+      router.push('/')
     }, 500)
   }
 }

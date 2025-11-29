@@ -31,19 +31,20 @@ export default defineRouter(function () {
     auth.checkAuth()
 
     const isAuthenticated = auth.isAuthenticated
-    const requiresAuth = to.meta?.requiresAuth !== false
 
-    // Si la ruta NO requiere autenticación, permitir acceso
-    if (!requiresAuth) {
-      // Si el usuario ya está autenticado y va a login, redirigir al dashboard
-      if (to.path === '/login' && isAuthenticated) {
+    // Si la ruta es login
+    if (to.path === '/login') {
+      // Si está autenticado, redirigir al inicio
+      if (isAuthenticated) {
         return next('/')
       }
+      // Si no está autenticado, permitir acceso al login
       return next()
     }
 
-    // Si la ruta REQUIERE autenticación y NO está autenticado, redirigir a login
-    if (requiresAuth && !isAuthenticated) {
+    // Para todas las otras rutas, verificar autenticación
+    if (!isAuthenticated) {
+      // Si no está autenticado, redirigir a login
       return next('/login')
     }
 

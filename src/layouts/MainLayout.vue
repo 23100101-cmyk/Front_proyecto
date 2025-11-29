@@ -275,12 +275,10 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useAuthStore } from 'src/stores/auth'
 
 const $q = useQuasar()
-const router = useRouter()
 const auth = useAuthStore()
 
 const showUserMenu = ref(false)

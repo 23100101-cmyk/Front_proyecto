@@ -58,6 +58,11 @@
           <q-item-section>Beneficios</q-item-section>
         </q-item>
 
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/reportes">
+          <q-item-section avatar><q-icon name="assessment" /></q-item-section>
+          <q-item-section>Reportes</q-item-section>
+        </q-item>
+
         <q-separator class="q-my-md" />
 
         <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/encuesta-salida">

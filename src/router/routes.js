@@ -11,6 +11,7 @@ const routes = [
       { path: 'gamificacion', component: () => import('pages/GamificationPage.vue') },
       { path: 'beneficios', component: () => import('pages/BenefitsPage.vue') },
       { path: 'notificaciones', component: () => import('pages/NotificationsPage.vue') },
+      { path: 'reportes', component: () => import('pages/ReportsPage.vue') },
       { path: 'registro-vacante', component: () => import('pages/JobRegistrationPage.vue') },
       { path: 'dashboard-skills', component: () => import('pages/SkillsDashboard.vue') },
       { path: 'dashboard-critico', component: () => import('pages/CriticalSkillsDashboard.vue') },

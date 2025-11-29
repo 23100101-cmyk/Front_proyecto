@@ -9,7 +9,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     meta: { requiresAuth: true },
     children: [
-      { path: '', component: () => import('pages/IndexPage.vue') },
+      { path: '', redirect: '/dashboard' },
       { path: 'dashboard', component: () => import('pages/DashboardPage.vue') },
       { path: 'analytics', component: () => import('pages/AnalyticsPage.vue') },
       { path: 'vacantes-management', component: () => import('pages/VacantesManagementPage.vue') },

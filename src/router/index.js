@@ -34,9 +34,9 @@ export default defineRouter(function () {
 
     // Si la ruta es login
     if (to.path === '/login') {
-      // Si está autenticado, redirigir al inicio
+      // Si está autenticado, redirigir al dashboard
       if (isAuthenticated) {
-        return next('/')
+        return next('/dashboard')
       }
       // Si no está autenticado, permitir acceso al login
       return next()

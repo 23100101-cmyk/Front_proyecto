@@ -42,13 +42,18 @@ export default defineRouter(function () {
       return next()
     }
 
-    // Para todas las otras rutas, verificar autenticación
-    if (!isAuthenticated) {
-      // Si no está autenticado, redirigir a login
-      return next('/login')
+    // Si va a /app/dashboard o cualquier ruta bajo /app/
+    if (to.path.startsWith('/app')) {
+      // Verificar que está autenticado
+      if (!isAuthenticated) {
+        // Si no está autenticado, redirigir a login
+        return next('/login')
+      }
+      // Si está autenticado, permitir acceso
+      return next()
     }
 
-    // Si está autenticado, permitir acceso
+    // Para todas las otras rutas, permitir acceso (catch-all)
     return next()
   })
 

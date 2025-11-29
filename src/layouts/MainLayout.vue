@@ -299,7 +299,10 @@ const handleLogout = () => {
       message: 'Sesión cerrada correctamente',
       position: 'top',
     })
-    router.push('/login')
+    // Redirigir al login después de un breve delay
+    setTimeout(() => {
+      router.push('/login')
+    }, 500)
   })
 }
 </script>

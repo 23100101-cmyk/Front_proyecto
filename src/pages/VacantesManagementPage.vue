@@ -1,304 +1,82 @@
 <template>
   <q-page class="q-pa-lg">
     <div class="row items-center justify-between q-mb-lg">
-      <div>
-        <h1 class="text-h4 text-weight-bold">Gestión de Vacantes</h1>
-        <p class="text-caption text-grey-7">Administra todas las vacantes abiertas</p>
-      </div>
-      <q-btn unelevated label="Nueva Vacante" color="positive" icon="add" @click="abrirFormNueva" />
+      <h1 class="text-h4 text-weight-bold">Gestión de Vacantes</h1>
+      <q-btn label="Nueva Vacante" color="positive" icon="add" @click="showForm = !showForm" />
     </div>
 
-    <!-- Mensajes de estado -->
-    <q-banner v-if="crud.hasSuccess" class="bg-positive text-white q-mb-lg">
-      {{ crud.success }}
-      <template v-slot:action>
-        <q-btn flat dense icon="close" @click="crud.clearMessages" />
-      </template>
-    </q-banner>
+    <q-card v-if="showForm" class="q-mb-lg">
+      <q-card-section>
+        <div class="text-h6 q-mb-md">Nueva Vacante</div>
+        <div class="row q-col-gutter-md">
+          <div class="col-xs-12 col-md-6">
+            <q-input v-model="newVacante.titulo" label="Título" outlined dense />
+          </div>
+          <div class="col-xs-12 col-md-6">
+            <q-input v-model="newVacante.area" label="Área" outlined dense />
+          </div>
+          <div class="col-xs-12">
+            <q-input v-model="newVacante.descripcion" label="Descripción" outlined dense type="textarea" />
+          </div>
+          <div class="col-xs-12">
+            <q-btn label="Guardar" color="positive" @click="agregarVacante" />
+            <q-btn label="Cancelar" flat color="secondary" class="q-ml-md" @click="showForm = false" />
+          </div>
+        </div>
+      </q-card-section>
+    </q-card>
 
-    <q-banner v-if="crud.hasError" class="bg-negative text-white q-mb-lg">
-      {{ crud.error }}
-      <template v-slot:action>
-        <q-btn flat dense icon="close" @click="crud.clearMessages" />
-      </template>
-    </q-banner>
-
-    <!-- Tabla de Vacantes -->
-    <div v-if="!crud.isEditing">
-      <q-card>
-        <q-card-section>
-          <q-input
-            v-model="busqueda"
-            outlined
-            dense
-            placeholder="Buscar vacante..."
-            icon="search"
-            class="q-mb-md"
-          />
-
-          <q-table
-            :rows="vacantesFiltradas"
-            :columns="columns"
-            row-key="id"
-            flat
-            bordered
-            :loading="crud.loading"
-            pagination.sync="pagination"
-            @request="onRequest"
-          >
-            <template v-slot:body-cell-estado="props">
-              <q-td :props="props">
-                <q-badge :label="props.row.estado" :color="getColorEstado(props.row.estado)" />
-              </q-td>
-            </template>
-
-            <template v-slot:body-cell-acciones="props">
-              <q-td :props="props" auto-width>
-                <q-btn
-                  flat
-                  dense
-                  round
-                  icon="edit"
-                  size="sm"
-                  color="primary"
-                  @click="crud.selectForEdit(props.row)"
-                />
-                <q-btn
-                  flat
-                  dense
-                  round
-                  icon="delete"
-                  size="sm"
-                  color="negative"
-                  @click="confirmarEliminar(props.row.id)"
-                />
-              </q-td>
-            </template>
-          </q-table>
-        </q-card-section>
-      </q-card>
-    </div>
-
-    <!-- Formulario de Edición/Creación -->
-    <div v-else class="q-mt-lg">
-      <q-card>
-        <q-card-section>
-          <h3 class="text-h6 q-mt-none">
-            {{ crud.selectedItem.id ? 'Editar Vacante' : 'Nueva Vacante' }}
-          </h3>
-
-          <q-form @submit="guardarVacante" class="q-gutter-md q-mt-md">
-            <q-input
-              v-model="crud.selectedItem.titulo"
-              outlined
-              label="Título de la Posición"
-              :rules="[crud.validations.required]"
-            />
-
-            <q-input
-              v-model="crud.selectedItem.descripcion"
-              outlined
-              label="Descripción"
-              type="textarea"
-              rows="4"
-              :rules="[(val) => crud.validations.minLength(val, 10, 'Descripción')]"
-            />
-
-            <div class="row q-col-gutter-md">
-              <div class="col-xs-12 col-md-6">
-                <q-input
-                  v-model="crud.selectedItem.area"
-                  outlined
-                  label="Área"
-                  :rules="[crud.validations.required]"
-                />
-              </div>
-              <div class="col-xs-12 col-md-6">
-                <q-input
-                  v-model="crud.selectedItem.nivel"
-                  outlined
-                  label="Nivel"
-                  :rules="[crud.validations.required]"
-                />
-              </div>
-            </div>
-
-            <div class="row q-col-gutter-md">
-              <div class="col-xs-12 col-md-6">
-                <q-input
-                  v-model.number="crud.selectedItem.salarioMin"
-                  outlined
-                  label="Salario Mínimo"
-                  type="number"
-                  :rules="[crud.validations.number]"
-                />
-              </div>
-              <div class="col-xs-12 col-md-6">
-                <q-input
-                  v-model.number="crud.selectedItem.salarioMax"
-                  outlined
-                  label="Salario Máximo"
-                  type="number"
-                  :rules="[crud.validations.number]"
-                />
-              </div>
-            </div>
-
-            <q-select
-              v-model="crud.selectedItem.estado"
-              outlined
-              label="Estado"
-              :options="['Abierta', 'En Proceso', 'Cerrada']"
-              :rules="[crud.validations.required]"
-            />
-
-            <q-input
-              v-model="crud.selectedItem.requisitos"
-              outlined
-              label="Requisitos (separados por coma)"
-              type="textarea"
-              rows="3"
-            />
-
-            <div class="row q-gutter-md">
-              <q-btn label="Guardar" type="submit" color="positive" :loading="crud.loading" />
-              <q-btn label="Cancelar" color="grey-7" @click="crud.cancelEdit" />
-            </div>
-          </q-form>
-        </q-card-section>
-      </q-card>
-    </div>
+    <q-card>
+      <q-card-section>
+        <div class="text-h6 q-mb-md">Vacantes Disponibles</div>
+        <q-table :rows="vacantes" :columns="columns" row-key="id" flat bordered />
+      </q-card-section>
+    </q-card>
   </q-page>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useQuasar } from 'quasar'
-import { useCRUD } from 'src/composables/useCRUD'
-import { vacanteService } from 'src/services/backend'
-import { useAuthStore } from 'src/stores/auth'
+import { ref, reactive } from "vue"
+import { useQuasar } from "quasar"
 
 const $q = useQuasar()
-const authStore = useAuthStore()
-
-// Usar composable CRUD
-const crud = useCRUD('Vacante', vacanteService)
-
-const busqueda = ref('')
-const pagination = ref({
-  sortBy: 'titulo',
-  descending: false,
-  page: 1,
-  rowsPerPage: 10,
-  rowsNumber: 0,
-})
+const showForm = ref(false)
 
 const columns = [
-  { name: 'titulo', label: 'Título', field: 'titulo', align: 'left' },
-  { name: 'area', label: 'Área', field: 'area', align: 'left' },
-  { name: 'nivel', label: 'Nivel', field: 'nivel', align: 'center' },
-  { name: 'estado', label: 'Estado', field: 'estado', align: 'center' },
-  { name: 'salarioMin', label: 'Salario Mín', field: 'salarioMin', align: 'center' },
-  { name: 'acciones', label: 'Acciones', field: 'acciones', align: 'center' },
+  { name: "titulo", label: "Título", field: "titulo", align: "left" },
+  { name: "area", label: "Área", field: "area", align: "left" },
+  { name: "descripcion", label: "Descripción", field: "descripcion", align: "left" },
 ]
 
-const vacantesFiltradas = computed(() => {
-  return crud.items.filter((vacante) => {
-    const search = busqueda.value.toLowerCase()
-    return (
-      vacante.titulo.toLowerCase().includes(search) || vacante.area.toLowerCase().includes(search)
-    )
-  })
+const vacantes = ref([
+  { id: 1, titulo: "Desarrollador Frontend", area: "Tecnología", descripcion: "Se busca desarrollador Vue.js" },
+  { id: 2, titulo: "Analista de Datos", area: "Analytics", descripcion: "Experto en análisis de datos" },
+])
+
+const newVacante = reactive({
+  titulo: "",
+  area: "",
+  descripcion: "",
 })
 
-onMounted(async () => {
-  if (authStore.isAuthenticated) {
-    await cargarVacantes()
-  }
-})
-
-const cargarVacantes = async () => {
-  const result = await crud.read()
-  if (result.success) {
-    pagination.value.rowsNumber = crud.itemCount
-  }
-}
-
-const abrirFormNueva = () => {
-  crud.selectedItem.value = {
-    id: null,
-    titulo: '',
-    descripcion: '',
-    area: '',
-    nivel: '',
-    estado: 'Abierta',
-    salarioMin: 0,
-    salarioMax: 0,
-    requisitos: '',
-  }
-  crud.isEditing.value = true
-}
-
-const guardarVacante = async () => {
-  const validationRules = {
-    titulo: crud.validations.required,
-    area: crud.validations.required,
-    nivel: crud.validations.required,
+const agregarVacante = () => {
+  if (!newVacante.titulo || !newVacante.area) {
+    $q.notify({ type: "negative", message: "Completa los campos requeridos" })
+    return
   }
 
-  if (crud.selectedItem.id) {
-    // Actualizar
-    const result = await crud.update(crud.selectedItem.id, crud.selectedItem, validationRules)
-    if (result.success) {
-      $q.notify({
-        type: 'positive',
-        message: 'Vacante actualizada correctamente',
-        position: 'top',
-      })
-    }
-  } else {
-    // Crear
-    const result = await crud.create(crud.selectedItem, validationRules)
-    if (result.success) {
-      $q.notify({
-        type: 'positive',
-        message: 'Vacante creada correctamente',
-        position: 'top',
-      })
-    }
-  }
-}
-
-const confirmarEliminar = (id) => {
-  $q.dialog({
-    title: 'Confirmar eliminación',
-    message: '¿Estás seguro de que deseas eliminar esta vacante?',
-    cancel: true,
-    persistent: true,
-  }).onOk(async () => {
-    const result = await crud.delete_(id)
-    if (result.success) {
-      $q.notify({
-        type: 'positive',
-        message: 'Vacante eliminada correctamente',
-        position: 'top',
-      })
-    }
+  vacantes.value.push({
+    id: Date.now(),
+    ...newVacante,
   })
-}
 
-const onRequest = async (props) => {
-  // Aquí iría la paginación desde el backend
-  pagination.value = props.pagination
-}
+  newVacante.titulo = ""
+  newVacante.area = ""
+  newVacante.descripcion = ""
+  showForm.value = false
 
-const getColorEstado = (estado) => {
-  const colorMap = {
-    Abierta: 'positive',
-    'En Proceso': 'warning',
-    Cerrada: 'negative',
-  }
-  return colorMap[estado] || 'grey'
+  $q.notify({ type: "positive", message: "Vacante agregada" })
 }
 </script>
 
+<style scoped></style>

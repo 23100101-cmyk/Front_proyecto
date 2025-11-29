@@ -36,7 +36,7 @@
 
             <!-- Opciones -->
             <q-card-section>
-              <q-item clickable v-ripple to="/mi-perfil-dashboard">
+              <q-item clickable v-ripple to="/app/mi-perfil-dashboard">
                 <q-item-section avatar>
                   <q-icon name="person" color="green-7" />
                 </q-item-section>
@@ -84,7 +84,7 @@
           exact
           active-class="text-green-7 bg-grey-3"
           class="q-pb-lg"
-          to="/"
+          to="/app/dashboard"
         >
           <q-item-section avatar><q-icon name="home" /></q-item-section>
           <q-item-section>Inicio</q-item-section>
@@ -96,7 +96,7 @@
           exact
           active-class="text-green-7 bg-grey-3"
           class="q-pb-lg"
-          to="/mi-perfil-dashboard"
+          to="/app/mi-perfil-dashboard"
         >
           <q-item-section avatar><q-icon name="dashboard" /></q-item-section>
           <q-item-section>Mi Dashboard</q-item-section>
@@ -108,7 +108,7 @@
           exact
           active-class="text-green-7 bg-grey-3"
           class="q-pb-lg"
-          to="/mi-perfil"
+          to="/app/mi-perfil"
         >
           <q-item-section avatar><q-icon name="person" /></q-item-section>
           <q-item-section>Mi Perfil</q-item-section>
@@ -120,7 +120,7 @@
           exact
           active-class="text-green-7 bg-grey-3"
           class="q-pb-lg"
-          to="/oportunidades"
+          to="/app/oportunidades"
         >
           <q-item-section avatar><q-icon name="work" /></q-item-section>
           <q-item-section>Oportunidades</q-item-section>
@@ -132,7 +132,7 @@
           exact
           active-class="text-green-7 bg-grey-3"
           class="q-pb-lg"
-          to="/catalogo-cursos"
+          to="/app/catalogo-cursos"
         >
           <q-item-section avatar><q-icon name="menu_book" /></q-item-section>
           <q-item-section>Catálogo Cursos</q-item-section>
@@ -144,7 +144,7 @@
           exact
           active-class="text-green-7 bg-grey-3"
           class="q-pb-lg"
-          to="/progreso-cursos"
+          to="/app/progreso-cursos"
         >
           <q-item-section avatar><q-icon name="school" /></q-item-section>
           <q-item-section>Mi Progreso</q-item-section>
@@ -156,7 +156,7 @@
           exact
           active-class="text-green-7 bg-grey-3"
           class="q-pb-lg"
-          to="/gamificacion"
+          to="/app/gamificacion"
         >
           <q-item-section avatar><q-icon name="star" /></q-item-section>
           <q-item-section>Puntos & Logros</q-item-section>
@@ -168,7 +168,7 @@
           exact
           active-class="text-green-7 bg-grey-3"
           class="q-pb-lg"
-          to="/skill-matcher"
+          to="/app/skill-matcher"
         >
           <q-item-section avatar><q-icon name="match_case" /></q-item-section>
           <q-item-section>Skill Matcher</q-item-section>
@@ -184,7 +184,7 @@
           exact
           active-class="text-green-7 bg-grey-3"
           class="q-pb-lg"
-          to="/analytics"
+          to="/app/analytics"
         >
           <q-item-section avatar><q-icon name="analytics" /></q-item-section>
           <q-item-section>Analytics & KPIs</q-item-section>
@@ -196,7 +196,7 @@
           exact
           active-class="text-green-7 bg-grey-3"
           class="q-pb-lg"
-          to="/vacantes-management"
+          to="/app/vacantes-management"
         >
           <q-item-section avatar><q-icon name="business" /></q-item-section>
           <q-item-section>Gestión Vacantes</q-item-section>
@@ -208,7 +208,7 @@
           exact
           active-class="text-green-7 bg-grey-3"
           class="q-pb-lg"
-          to="/skills-management"
+          to="/app/skills-management"
         >
           <q-item-section avatar><q-icon name="auto_awesome" /></q-item-section>
           <q-item-section>Gestión Skills</q-item-section>
@@ -220,7 +220,7 @@
           exact
           active-class="text-green-7 bg-grey-3"
           class="q-pb-lg"
-          to="/reportes"
+          to="/app/reportes"
         >
           <q-item-section avatar><q-icon name="assessment" /></q-item-section>
           <q-item-section>Reportes</q-item-section>
@@ -232,7 +232,7 @@
           exact
           active-class="text-green-7 bg-grey-3"
           class="q-pb-lg"
-          to="/gestionar-perfil-colaborador"
+          to="/app/gestionar-perfil-colaborador"
         >
           <q-item-section avatar><q-icon name="edit" /></q-item-section>
           <q-item-section>Gestión RR.HH.</q-item-section>
@@ -246,7 +246,7 @@
           exact
           active-class="text-green-7 bg-grey-3"
           class="q-pb-lg"
-          to="/beneficios"
+          to="/app/beneficios"
         >
           <q-item-section avatar><q-icon name="card_giftcard" /></q-item-section>
           <q-item-section>Beneficios</q-item-section>
@@ -258,7 +258,7 @@
           exact
           active-class="text-green-7 bg-grey-3"
           class="q-pb-lg"
-          to="/encuesta-salida"
+          to="/app/encuesta-salida"
         >
           <q-item-section avatar><q-icon name="poll" /></q-item-section>
           <q-item-section>Encuesta Salida</q-item-section>
@@ -306,3 +306,5 @@ const handleLogout = () => {
 </script>
 
 <style scoped></style>
+
+

@@ -1,7 +1,13 @@
 const routes = [
   {
+    path: '/login',
+    component: () => import('pages/Login.vue'),
+    meta: { requiresAuth: false }
+  },
+  {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
       { path: 'dashboard', component: () => import('pages/DashboardPage.vue') },
@@ -15,7 +21,6 @@ const routes = [
       { path: 'gamificacion', component: () => import('pages/GamificationPage.vue') },
       { path: 'beneficios', component: () => import('pages/BenefitsPage.vue') },
       { path: 'notificaciones', component: () => import('pages/NotificationsPage.vue') },
-      { path: 'reportes', component: () => import('pages/ReportsPage.vue') },
       { path: 'registro-vacante', component: () => import('pages/JobRegistrationPage.vue') },
       { path: 'dashboard-skills', component: () => import('pages/SkillsDashboard.vue') },
       { path: 'dashboard-critico', component: () => import('pages/CriticalSkillsDashboard.vue') },
@@ -26,7 +31,6 @@ const routes = [
       { path: 'skill-matcher', component: () => import('pages/SkillMatcherTool.vue') },
       { path: 'actualizar-perfil-skills', component: () => import('pages/SkillProfileUpdateForm.vue') },
       { path: 'gestionar-perfil-colaborador', component: () => import('pages/CollaboratorProfileManager.vue') },
-      { path: 'login', component: () => import('pages/Login.vue') },
     ]
   },
 

@@ -128,7 +128,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
-import { reporteService } from 'src/services/backend'
 import { useAuthStore } from 'src/stores/auth'
 
 const $q = useQuasar()

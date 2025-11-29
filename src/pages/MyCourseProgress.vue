@@ -144,7 +144,8 @@ const marcarProgreso = async (cursoId) => {
       message: 'Progreso actualizado',
     })
     await cargarCursos()
-  } catch (err) {
+  } catch (error) {
+    console.error('Error al actualizar curso:', error)
     $q.notify({
       type: 'negative',
       message: 'Error al actualizar el curso',

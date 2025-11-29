@@ -53,6 +53,21 @@
           <q-item-section>Puntos & Logros</q-item-section>
         </q-item>
 
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/analytics">
+          <q-item-section avatar><q-icon name="analytics" /></q-item-section>
+          <q-item-section>Analytics & KPIs</q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/vacantes-management">
+          <q-item-section avatar><q-icon name="business" /></q-item-section>
+          <q-item-section>Gestión Vacantes</q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/skills-management">
+          <q-item-section avatar><q-icon name="auto_awesome" /></q-item-section>
+          <q-item-section>Gestión Skills</q-item-section>
+        </q-item>
+
         <q-item clickable v-ripple exact active-class="text-green-7 bg-grey-3" class="q-pb-lg" to="/beneficios">
           <q-item-section avatar><q-icon name="card_giftcard" /></q-item-section>
           <q-item-section>Beneficios</q-item-section>

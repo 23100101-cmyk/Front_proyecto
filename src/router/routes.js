@@ -5,6 +5,10 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
       { path: 'dashboard', component: () => import('pages/DashboardPage.vue') },
+      { path: 'analytics', component: () => import('pages/AnalyticsPage.vue') },
+      { path: 'vacantes-management', component: () => import('pages/VacantesManagementPage.vue') },
+      { path: 'skills-management', component: () => import('pages/SkillsManagementPage.vue') },
+      { path: 'reportes', component: () => import('pages/ReportsPage.vue') },
       { path: 'perfil', component: () => import('pages/ProfilePage.vue') },
       { path: 'mi-perfil', component: () => import('pages/MyProfilePage.vue') },
       { path: 'oportunidades', component: () => import('pages/OpportunitiesPage.vue') },

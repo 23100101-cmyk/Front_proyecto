@@ -12,7 +12,7 @@
         <q-space />
 
         <!-- Notificaciones -->
-        <q-btn flat dense icon="notifications" to="/notificaciones" class="q-mr-md">
+        <q-btn flat dense icon="notifications" to="/app/notificaciones" class="q-mr-md">
           <q-badge color="red" floating rounded size="sm" label="3" />
           <q-tooltip>Notificaciones</q-tooltip>
         </q-btn>

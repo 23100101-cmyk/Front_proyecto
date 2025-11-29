@@ -6,10 +6,14 @@ const routes = [
   },
   {
     path: '/',
+    redirect: '/login',
+  },
+  {
+    path: '/app',
     component: () => import('layouts/MainLayout.vue'),
     meta: { requiresAuth: true },
     children: [
-      { path: '', redirect: '/dashboard' },
+      { path: '', redirect: '/app/dashboard' },
       { path: 'dashboard', component: () => import('pages/DashboardPage.vue') },
       { path: 'analytics', component: () => import('pages/AnalyticsPage.vue') },
       { path: 'vacantes-management', component: () => import('pages/VacantesManagementPage.vue') },

@@ -174,7 +174,7 @@ const onSubmit = async () => {
     })
 
     setTimeout(() => {
-      router.push('/dashboard')
+      router.push('/app/dashboard')
     }, 500)
   }
 }

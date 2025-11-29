@@ -76,10 +76,7 @@
             >
               <template v-slot:body-cell-estado="props">
                 <q-td :props="props">
-                  <q-badge
-                    :label="props.row.estado"
-                    :color="getColorEstado(props.row.estado)"
-                  />
+                  <q-badge :label="props.row.estado" :color="getColorEstado(props.row.estado)" />
                 </q-td>
               </template>
             </q-table>
@@ -255,10 +252,10 @@ const verCursosRecomendados = (skill) => {
 
 const getColorEstado = (estado) => {
   const colorMap = {
-    'Rechazado': 'negative',
-    'Pendiente': 'warning',
-    'Entrevista': 'info',
-    'Aceptado': 'positive',
+    Rechazado: 'negative',
+    Pendiente: 'warning',
+    Entrevista: 'info',
+    Aceptado: 'positive',
   }
   return colorMap[estado] || 'grey'
 }

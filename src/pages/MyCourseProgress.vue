@@ -1,9 +1,7 @@
 <template>
   <q-page class="q-pa-xl">
     <div class="text-h4 text-weight-bold q-mb-sm">Mi Progreso en Cursos</div>
-    <div class="text-subtitle1 text-grey-7 q-mb-lg">
-      Cursos en los que estás inscrito.
-    </div>
+    <div class="text-subtitle1 text-grey-7 q-mb-lg">Cursos en los que estás inscrito.</div>
 
     <div class="q-gutter-sm q-mb-xl">
       <q-chip
@@ -41,16 +39,24 @@
 
           <div class="q-mt-md">
             <div v-if="course.porcentajeCompletado > 0">
-              <q-linear-progress :value="course.porcentajeCompletado / 100" color="green-7" track-color="grey-3" style="height: 8px;" />
+              <q-linear-progress
+                :value="course.porcentajeCompletado / 100"
+                color="green-7"
+                track-color="grey-3"
+                style="height: 8px"
+              />
               <div class="text-caption text-weight-bold q-mt-xs">
                 {{ course.porcentajeCompletado }}% Completado
               </div>
             </div>
             <div v-else>
-              <q-linear-progress :value="0" color="grey-3" track-color="grey-2" style="height: 8px;" />
-              <div class="text-caption text-weight-bold q-mt-xs text-grey-7">
-                Sin iniciar
-              </div>
+              <q-linear-progress
+                :value="0"
+                color="grey-3"
+                track-color="grey-2"
+                style="height: 8px"
+              />
+              <div class="text-caption text-weight-bold q-mt-xs text-grey-7">Sin iniciar</div>
             </div>
           </div>
 
@@ -62,15 +68,8 @@
               color="green-7"
               @click="marcarProgreso(course.id)"
             />
-            <q-btn
-              v-else
-              unelevated
-              label="Completado"
-              color="positive"
-              disable
-            />
+            <q-btn v-else unelevated label="Completado" color="positive" disable />
           </div>
-
         </q-card>
       </div>
     </div>
@@ -97,7 +96,7 @@ const error = ref(null)
 const filtroEstado = ref('En Curso')
 
 const cursosFiltrados = computed(() => {
-  return cursos.value.filter(course => {
+  return cursos.value.filter((course) => {
     if (filtroEstado.value === 'En Curso') {
       return course.porcentajeCompletado < 100
     } else if (filtroEstado.value === 'Completados') {
@@ -137,7 +136,7 @@ const marcarProgreso = async (cursoId) => {
       })
       return
     }
-    
+
     await cursoService.completar(colaboradorId, cursoId)
     $q.notify({
       type: 'positive',

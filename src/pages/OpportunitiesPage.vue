@@ -15,10 +15,24 @@
             <q-input v-model="busqueda" label="Buscar..." outlined dense icon="search" />
           </div>
           <div class="col-xs-12 col-md-3">
-            <q-select v-model="filtroArea" label="Área" outlined dense :options="areasUnicas" clearable />
+            <q-select
+              v-model="filtroArea"
+              label="Área"
+              outlined
+              dense
+              :options="areasUnicas"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-md-3">
-            <q-select v-model="filtroNivel" label="Nivel" outlined dense :options="['Junior', 'Mid', 'Senior']" clearable />
+            <q-select
+              v-model="filtroNivel"
+              label="Nivel"
+              outlined
+              dense
+              :options="['Junior', 'Mid', 'Senior']"
+              clearable
+            />
           </div>
         </div>
       </q-card-section>
@@ -79,7 +93,7 @@
               <p>{{ vacanteActual.descripcion }}</p>
               <div class="text-h6 q-mb-md q-mt-lg">Requisitos</div>
               <ul>
-                <li v-for="(req, i) in (vacanteActual.requisitos || [])" :key="i">{{ req }}</li>
+                <li v-for="(req, i) in vacanteActual.requisitos || []" :key="i">{{ req }}</li>
               </ul>
             </div>
             <div class="col-xs-12 col-md-4">
@@ -144,7 +158,8 @@ const areasUnicas = computed(() => {
 
 const vacantesFiltradas = computed(() => {
   return vacanteStore.vacantes.filter((v) => {
-    const matchBusqueda = v.titulo.toLowerCase().includes(busqueda.value.toLowerCase()) ||
+    const matchBusqueda =
+      v.titulo.toLowerCase().includes(busqueda.value.toLowerCase()) ||
       v.descripcion.toLowerCase().includes(busqueda.value.toLowerCase())
     const matchArea = !filtroArea.value || v.area === filtroArea.value
     const matchNivel = !filtroNivel.value || v.nivel === filtroNivel.value

@@ -51,7 +51,9 @@
                   <q-item-label class="text-h6">Total Anual</q-item-label>
                 </q-item-section>
                 <q-item-section side top>
-                  <q-item-label class="text-h6 text-weight-bold text-positive">{{ totalAnual }}</q-item-label>
+                  <q-item-label class="text-h6 text-weight-bold text-positive">{{
+                    totalAnual
+                  }}</q-item-label>
                 </q-item-section>
               </q-item>
             </q-list>

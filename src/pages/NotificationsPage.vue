@@ -37,10 +37,7 @@
           @click="toggleLeido(notif.id)"
         >
           <q-item-section avatar>
-            <q-icon
-              :name="getIcon(notif.tipo)"
-              :color="notif.leida ? 'grey-5' : 'primary'"
-            />
+            <q-icon :name="getIcon(notif.tipo)" :color="notif.leida ? 'grey-5' : 'primary'" />
           </q-item-section>
 
           <q-item-section>
@@ -154,7 +151,7 @@ const marcarTodoLeido = async () => {
     persistent: true,
   }).onOk(async () => {
     try {
-      for (const notif of notificaciones.value.filter(n => !n.leida)) {
+      for (const notif of notificaciones.value.filter((n) => !n.leida)) {
         await notificacionStore.marcarLeida(notif.id)
       }
       $q.notify({
@@ -172,12 +169,12 @@ const marcarTodoLeido = async () => {
 
 const getIcon = (tipo) => {
   const iconMap = {
-    'match': 'favorite',
-    'aplicacion': 'work',
-    'curso': 'school',
-    'puntos': 'star',
-    'certificacion': 'verified',
-    'default': 'notifications',
+    match: 'favorite',
+    aplicacion: 'work',
+    curso: 'school',
+    puntos: 'star',
+    certificacion: 'verified',
+    default: 'notifications',
   }
   return iconMap[tipo] || iconMap['default']
 }

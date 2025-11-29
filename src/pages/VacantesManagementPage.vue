@@ -5,13 +5,7 @@
         <h1 class="text-h4 text-weight-bold">Gestión de Vacantes</h1>
         <p class="text-caption text-grey-7">Administra todas las vacantes abiertas</p>
       </div>
-      <q-btn
-        unelevated
-        label="Nueva Vacante"
-        color="positive"
-        icon="add"
-        @click="abrirFormNueva"
-      />
+      <q-btn unelevated label="Nueva Vacante" color="positive" icon="add" @click="abrirFormNueva" />
     </div>
 
     <!-- Mensajes de estado -->
@@ -54,10 +48,7 @@
           >
             <template v-slot:body-cell-estado="props">
               <q-td :props="props">
-                <q-badge
-                  :label="props.row.estado"
-                  :color="getColorEstado(props.row.estado)"
-                />
+                <q-badge :label="props.row.estado" :color="getColorEstado(props.row.estado)" />
               </q-td>
             </template>
 
@@ -170,17 +161,8 @@
             />
 
             <div class="row q-gutter-md">
-              <q-btn
-                label="Guardar"
-                type="submit"
-                color="positive"
-                :loading="crud.loading"
-              />
-              <q-btn
-                label="Cancelar"
-                color="grey-7"
-                @click="crud.cancelEdit"
-              />
+              <q-btn label="Guardar" type="submit" color="positive" :loading="crud.loading" />
+              <q-btn label="Cancelar" color="grey-7" @click="crud.cancelEdit" />
             </div>
           </q-form>
         </q-card-section>
@@ -224,8 +206,7 @@ const vacantesFiltradas = computed(() => {
   return crud.items.filter((vacante) => {
     const search = busqueda.value.toLowerCase()
     return (
-      vacante.titulo.toLowerCase().includes(search) ||
-      vacante.area.toLowerCase().includes(search)
+      vacante.titulo.toLowerCase().includes(search) || vacante.area.toLowerCase().includes(search)
     )
   })
 })
@@ -313,9 +294,9 @@ const onRequest = async (props) => {
 
 const getColorEstado = (estado) => {
   const colorMap = {
-    'Abierta': 'positive',
+    Abierta: 'positive',
     'En Proceso': 'warning',
-    'Cerrada': 'negative',
+    Cerrada: 'negative',
   }
   return colorMap[estado] || 'grey'
 }

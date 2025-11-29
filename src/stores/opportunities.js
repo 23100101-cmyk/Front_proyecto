@@ -25,7 +25,9 @@ export const useOpportunitiesStore = defineStore('opportunities', () => {
     })
   })
 
-  const appliedOpportunitiesIds = computed(() => myApplications.value.map((app) => app.opportunityId))
+  const appliedOpportunitiesIds = computed(() =>
+    myApplications.value.map((app) => app.opportunityId),
+  )
 
   const hasApplied = (opportunityId) => appliedOpportunitiesIds.value.includes(opportunityId)
 

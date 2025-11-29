@@ -132,9 +132,27 @@ const puntosTotales = computed(() => colaboradorStore.puntos?.total || 0)
 const profileCompletion = computed(() => colaboradorStore.profileCompleteness || 0)
 
 const historialReciente = ref([
-  { icono: 'star', color: 'warning', titulo: 'Skill agregada', descripcion: 'Agregaste Python a tu perfil', fecha: 'Hoy' },
-  { icono: 'school', color: 'info', titulo: 'Curso iniciado', descripcion: 'Iniciaste Cloud Computing con AWS', fecha: 'Ayer' },
-  { icono: 'favorite', color: 'negative', titulo: 'Match encontrado', descripcion: 'Match con 92% para puesto de Backend', fecha: 'Hace 2 días' },
+  {
+    icono: 'star',
+    color: 'warning',
+    titulo: 'Skill agregada',
+    descripcion: 'Agregaste Python a tu perfil',
+    fecha: 'Hoy',
+  },
+  {
+    icono: 'school',
+    color: 'info',
+    titulo: 'Curso iniciado',
+    descripcion: 'Iniciaste Cloud Computing con AWS',
+    fecha: 'Ayer',
+  },
+  {
+    icono: 'favorite',
+    color: 'negative',
+    titulo: 'Match encontrado',
+    descripcion: 'Match con 92% para puesto de Backend',
+    fecha: 'Hace 2 días',
+  },
 ])
 
 onMounted(async () => {
@@ -149,7 +167,7 @@ const cargarDatos = async () => {
     await colaboradorStore.fetchColaborador()
     await colaboradorStore.fetchSkills()
     await colaboradorStore.fetchPuntos()
-    
+
     // Simulación de datos adicionales - estos vendrian del backend
     skillsCount.value = colaboradorStore.skills.length || 0
     cursosActivos.value = 2

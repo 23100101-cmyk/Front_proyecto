@@ -141,9 +141,7 @@ export const vacanteService = {
           const candidatos = mockData.aplicaciones
             .filter((a) => a.vacanteId === id)
             .map((a) => {
-              const colab = mockData.colaboradores.find(
-                (c) => c.id === a.colaboradorId
-              )
+              const colab = mockData.colaboradores.find((c) => c.id === a.colaboradorId)
               return {
                 ...a,
                 colaborador: colab,
@@ -276,7 +274,7 @@ export const cursoService = {
       return new Promise((resolve) => {
         setTimeout(() => {
           const progress = mockData.cursoProgress.find(
-            (p) => p.colaboradorId === colaboradorId && p.cursoId === cursoId
+            (p) => p.colaboradorId === colaboradorId && p.cursoId === cursoId,
           )
           if (progress) {
             progress.estado = 'Completado'
@@ -318,15 +316,13 @@ export const cursoService = {
       return new Promise((resolve) => {
         setTimeout(() => {
           const progress = mockData.cursoProgress.find(
-            (p) => p.colaboradorId === colaboradorId && p.cursoId === cursoId
+            (p) => p.colaboradorId === colaboradorId && p.cursoId === cursoId,
           )
           resolve({ data: progress || {} })
         }, 300)
       })
     }
-    return api.get(
-      `/api/colaborador/${colaboradorId}/cursos/${cursoId}/progreso`
-    )
+    return api.get(`/api/colaborador/${colaboradorId}/cursos/${cursoId}/progreso`)
   },
 }
 
@@ -383,7 +379,7 @@ export const skillService = {
       return new Promise((resolve) => {
         setTimeout(() => {
           const index = mockData.colaboradorSkills.findIndex(
-            (cs) => cs.colaboradorId === colaboradorId && cs.skillId === skillId
+            (cs) => cs.colaboradorId === colaboradorId && cs.skillId === skillId,
           )
           if (index >= 0) {
             mockData.colaboradorSkills[index] = {
@@ -403,10 +399,7 @@ export const skillService = {
         }, 300)
       })
     }
-    return api.put(
-      `/api/admin/colaborador/${colaboradorId}/skill/${skillId}`,
-      data
-    )
+    return api.put(`/api/admin/colaborador/${colaboradorId}/skill/${skillId}`, data)
   },
 
   // POST /api/skill/match - Matchear skills para identificar candidatos
@@ -420,9 +413,7 @@ export const skillService = {
               .filter((cs) => cs.colaboradorId === colab.id)
               .map((cs) => cs.skillId)
             const skillsRequeridos = data.skillIds || []
-            const matches = skillsRequeridos.filter((s) =>
-              skillsColab.includes(s)
-            )
+            const matches = skillsRequeridos.filter((s) => skillsColab.includes(s))
             return {
               ...colab,
               matchScore: (matches.length / Math.max(skillsRequeridos.length, 1)) * 100,
@@ -490,7 +481,7 @@ export const notificacionService = {
         setTimeout(() => {
           const colaboradorId = params.colaboradorId || 1
           const notificaciones = mockData.notificaciones.filter(
-            (n) => n.colaboradorId === colaboradorId
+            (n) => n.colaboradorId === colaboradorId,
           )
           resolve({ data: notificaciones })
         }, 300)

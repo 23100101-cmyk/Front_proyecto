@@ -19,7 +19,9 @@
             <!-- Encabezado -->
             <q-card-section class="bg-green-7 text-white text-center q-pa-lg">
               <h2 class="q-ma-none text-h5 text-weight-bold">Acceso al Sistema</h2>
-              <p class="q-mt-sm q-mb-none text-caption">Inicia sesión con tus credenciales de colaborador</p>
+              <p class="q-mt-sm q-mb-none text-caption">
+                Inicia sesión con tus credenciales de colaborador
+              </p>
             </q-card-section>
 
             <!-- Formulario -->
@@ -35,13 +37,7 @@
                 </template>
                 {{ auth.error }}
                 <template v-slot:action>
-                  <q-btn
-                    flat
-                    dense
-                    icon="close"
-                    size="sm"
-                    @click="auth.clearError()"
-                  />
+                  <q-btn flat dense icon="close" size="sm" @click="auth.clearError()" />
                 </template>
               </q-banner>
 
@@ -50,7 +46,7 @@
                 <template v-slot:avatar>
                   <q-icon name="info" color="blue-9" />
                 </template>
-                <strong>Credenciales de prueba:</strong><br>
+                <strong>Credenciales de prueba:</strong><br />
                 Usuario: <code>marperez</code> | Contraseña: <code>123456</code>
               </q-banner>
 
@@ -145,7 +141,7 @@ import { useQuasar } from 'quasar'
 import { useAuthStore } from 'src/stores/auth'
 
 defineOptions({
-  name: 'LoginPage'
+  name: 'LoginPage',
 })
 
 const $q = useQuasar()
@@ -154,7 +150,7 @@ const auth = useAuthStore()
 
 const form = ref({
   email: '',
-  password: ''
+  password: '',
 })
 
 const showPassword = ref(false)
@@ -164,7 +160,7 @@ const onSubmit = async () => {
     $q.notify({
       type: 'negative',
       message: 'Por favor completa todos los campos',
-      position: 'top'
+      position: 'top',
     })
     return
   }
@@ -176,7 +172,7 @@ const onSubmit = async () => {
       type: 'positive',
       message: `¡Bienvenido ${auth.userDisplayName}!`,
       position: 'top',
-      timeout: 1500
+      timeout: 1500,
     })
 
     setTimeout(() => {

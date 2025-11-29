@@ -5,13 +5,7 @@
         <h1 class="text-h4 text-weight-bold">Gestión de Skills</h1>
         <p class="text-caption text-grey-7">Administra el catálogo de competencias</p>
       </div>
-      <q-btn
-        unelevated
-        label="Nuevo Skill"
-        color="positive"
-        icon="add"
-        @click="abrirFormNueva"
-      />
+      <q-btn unelevated label="Nuevo Skill" color="positive" icon="add" @click="abrirFormNueva" />
     </div>
 
     <!-- Mensajes de estado -->
@@ -172,17 +166,8 @@
             />
 
             <div class="row q-gutter-md">
-              <q-btn
-                label="Guardar"
-                type="submit"
-                color="positive"
-                :loading="crud.loading"
-              />
-              <q-btn
-                label="Cancelar"
-                color="grey-7"
-                @click="crud.cancelEdit"
-              />
+              <q-btn label="Guardar" type="submit" color="positive" :loading="crud.loading" />
+              <q-btn label="Cancelar" color="grey-7" @click="crud.cancelEdit" />
             </div>
           </q-form>
         </q-card-section>
@@ -222,7 +207,12 @@ const columns = [
   { name: 'nombre', label: 'Nombre', field: 'nombre', align: 'left' },
   { name: 'categoria', label: 'Categoría', field: 'categoria', align: 'left' },
   { name: 'criticidad', label: 'Criticidad', field: 'criticidad', align: 'center' },
-  { name: 'profesionalesConSkill', label: 'Profesionales', field: 'profesionalesConSkill', align: 'center' },
+  {
+    name: 'profesionalesConSkill',
+    label: 'Profesionales',
+    field: 'profesionalesConSkill',
+    align: 'center',
+  },
   { name: 'demandaMercado', label: 'Demanda (%)', field: 'demandaMercado', align: 'center' },
   { name: 'acciones', label: 'Acciones', field: 'acciones', align: 'center' },
 ]
@@ -230,7 +220,8 @@ const columns = [
 const skillsFiltrados = computed(() => {
   return crud.items.filter((skill) => {
     const search = busqueda.value.toLowerCase()
-    const matchSearch = skill.nombre.toLowerCase().includes(search) ||
+    const matchSearch =
+      skill.nombre.toLowerCase().includes(search) ||
       skill.descripcion.toLowerCase().includes(search)
     const matchCategoria = !categoriaFiltro.value || skill.categoria === categoriaFiltro.value
     return matchSearch && matchCategoria
@@ -311,10 +302,10 @@ const confirmarEliminar = (id) => {
 
 const getColorCriticidad = (criticidad) => {
   const colorMap = {
-    'Crítica': 'negative',
-    'Alta': 'warning',
-    'Media': 'info',
-    'Baja': 'positive',
+    Crítica: 'negative',
+    Alta: 'warning',
+    Media: 'info',
+    Baja: 'positive',
   }
   return colorMap[criticidad] || 'grey'
 }

@@ -38,8 +38,7 @@ export const useNotificacionStore = defineStore('notificacion', () => {
       notificaciones.value = response.data
       return { success: true }
     } catch (err) {
-      error.value =
-        err.response?.data?.message || 'Error al obtener notificaciones'
+      error.value = err.response?.data?.message || 'Error al obtener notificaciones'
       return { success: false, error: error.value }
     } finally {
       loading.value = false
@@ -57,8 +56,7 @@ export const useNotificacionStore = defineStore('notificacion', () => {
       }
       return { success: true }
     } catch (err) {
-      error.value =
-        err.response?.data?.message || 'Error al marcar como leída'
+      error.value = err.response?.data?.message || 'Error al marcar como leída'
       return { success: false, error: error.value }
     } finally {
       loading.value = false
@@ -73,8 +71,7 @@ export const useNotificacionStore = defineStore('notificacion', () => {
       notificaciones.value = notificaciones.value.filter((n) => n.id !== id)
       return { success: true }
     } catch (err) {
-      error.value =
-        err.response?.data?.message || 'Error al eliminar notificación'
+      error.value = err.response?.data?.message || 'Error al eliminar notificación'
       return { success: false, error: error.value }
     } finally {
       loading.value = false
@@ -94,8 +91,7 @@ export const useNotificacionStore = defineStore('notificacion', () => {
       }))
       return { success: true }
     } catch (err) {
-      error.value =
-        err.response?.data?.message || 'Error al marcar notificaciones'
+      error.value = err.response?.data?.message || 'Error al marcar notificaciones'
       return { success: false, error: error.value }
     } finally {
       loading.value = false

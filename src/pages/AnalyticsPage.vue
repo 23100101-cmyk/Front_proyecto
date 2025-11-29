@@ -129,7 +129,9 @@
                   <div class="col">
                     <div class="text-center">
                       <div class="text-h4 text-positive">{{ kpis.vacantesCubiertas }}%</div>
-                      <p class="text-caption">Internas ({{ kpis.vacantesCubiertasNum }}/{{ kpis.vacantesTotales }})</p>
+                      <p class="text-caption">
+                        Internas ({{ kpis.vacantesCubiertasNum }}/{{ kpis.vacantesTotales }})
+                      </p>
                     </div>
                   </div>
                   <div class="col">

@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 
 // Datos de ejemplo - en producción vendrían del backend
 const MOCK_COLABORADORES = {
-  'marperez': {
+  marperez: {
     password: '123456',
     data: {
       colaboradorID: 1,
@@ -24,7 +24,7 @@ const MOCK_COLABORADORES = {
             skillID: 1,
             nombreSkill: 'C#',
             tipoSkill: 'Técnico',
-          }
+          },
         },
         {
           colaboradorID: 1,
@@ -35,7 +35,7 @@ const MOCK_COLABORADORES = {
             skillID: 2,
             nombreSkill: 'SQL Server',
             tipoSkill: 'Técnico',
-          }
+          },
         },
         {
           colaboradorID: 1,
@@ -46,8 +46,8 @@ const MOCK_COLABORADORES = {
             skillID: 3,
             nombreSkill: 'Azure',
             tipoSkill: 'Técnico',
-          }
-        }
+          },
+        },
       ],
       certificaciones: [
         {
@@ -63,7 +63,7 @@ const MOCK_COLABORADORES = {
           nombreCertificacion: 'Scrum Master',
           fechaObtencion: '2023-05-20T10:00:00',
           institucion: 'Scrum Alliance',
-        }
+        },
       ],
       cursosEnProgreso: [
         {
@@ -81,7 +81,7 @@ const MOCK_COLABORADORES = {
           progresoActual: 45,
           fechaInicio: '2024-11-10',
           fechaEstimadaFinalizacion: '2024-12-20',
-        }
+        },
       ],
       vacantesInteresadas: [
         {
@@ -93,9 +93,9 @@ const MOCK_COLABORADORES = {
           ubicacion: 'Lima',
           requisitosSkills: ['C#', 'SQL Server', 'Azure'],
           estado: 'Interesado',
-        }
-      ]
-    }
+        },
+      ],
+    },
   },
   'jgarcia@esan.edu.pe': {
     password: '123456',
@@ -117,7 +117,7 @@ const MOCK_COLABORADORES = {
             skillID: 4,
             nombreSkill: 'Vue.js',
             tipoSkill: 'Técnico',
-          }
+          },
         },
         {
           colaboradorID: 2,
@@ -127,8 +127,8 @@ const MOCK_COLABORADORES = {
             skillID: 5,
             nombreSkill: 'JavaScript',
             tipoSkill: 'Técnico',
-          }
-        }
+          },
+        },
       ],
       certificaciones: [
         {
@@ -137,12 +137,12 @@ const MOCK_COLABORADORES = {
           nombreCertificacion: 'Vue.js Advanced',
           fechaObtencion: '2024-08-15',
           institucion: 'Vue Mastery',
-        }
+        },
       ],
       cursosEnProgreso: [],
-      vacantesInteresadas: []
-    }
-  }
+      vacantesInteresadas: [],
+    },
+  },
 }
 
 export const useAuthStore = defineStore('auth', () => {
@@ -172,7 +172,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     try {
       // Simular delay de red
-      await new Promise(resolve => setTimeout(resolve, 800))
+      await new Promise((resolve) => setTimeout(resolve, 800))
 
       // Buscar usuario en mock data
       const colaborador = MOCK_COLABORADORES[emailOrUsername]

@@ -190,7 +190,8 @@ export const mockData = {
     {
       id: 1,
       titulo: 'Senior Full Stack Developer',
-      descripcion: 'Buscamos un desarrollador full stack senior con experiencia en Vue.js y Node.js',
+      descripcion:
+        'Buscamos un desarrollador full stack senior con experiencia en Vue.js y Node.js',
       departamento: 'Ingeniería',
       salario: '$8000 - $12000',
       ubicacion: 'Remoto',
@@ -199,13 +200,7 @@ export const mockData = {
       estado: 'Abierta',
       fechaPublicacion: '2024-11-01',
       deadline: '2024-12-31',
-      listaRequisitos: [
-        'Vue.js 3',
-        'Node.js/Express',
-        'SQL',
-        'JavaScript/TypeScript',
-        'Git',
-      ],
+      listaRequisitos: ['Vue.js 3', 'Node.js/Express', 'SQL', 'JavaScript/TypeScript', 'Git'],
       skillsRequeridos: ['Vue.js', 'Node.js', 'JavaScript', 'SQL', 'REST APIs'],
       candidatos: 12,
     },
@@ -221,12 +216,7 @@ export const mockData = {
       estado: 'Abierta',
       fechaPublicacion: '2024-11-10',
       deadline: '2024-12-20',
-      listaRequisitos: [
-        'Product Management',
-        'Agile',
-        'Análisis de datos',
-        'Liderazgo',
-      ],
+      listaRequisitos: ['Product Management', 'Agile', 'Análisis de datos', 'Liderazgo'],
       skillsRequeridos: ['Product Strategy', 'Analytics', 'Leadership'],
       candidatos: 8,
     },

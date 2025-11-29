@@ -28,13 +28,7 @@ export const useColaboradorStore = defineStore('colaborador', () => {
     let filled = 0
     let total = 0
 
-    const fields = [
-      'nombre',
-      'email',
-      'experiencia',
-      'disponibilidad',
-      'foto',
-    ]
+    const fields = ['nombre', 'email', 'experiencia', 'disponibilidad', 'foto']
     fields.forEach((field) => {
       total++
       if (colaborador.value[field]) filled++
@@ -97,11 +91,7 @@ export const useColaboradorStore = defineStore('colaborador', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await skillService.updateColaboradorSkill(
-        colaboradorId,
-        skillId,
-        data
-      )
+      const response = await skillService.updateColaboradorSkill(colaboradorId, skillId, data)
       // Actualizar el skill en la lista
       const index = skills.value.findIndex((s) => s.id === skillId)
       if (index > -1) {

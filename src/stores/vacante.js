@@ -16,12 +16,9 @@ export const useVacanteStore = defineStore('vacante', () => {
   // Computed
   const vacantesFiltradas = computed(() => {
     return vacantes.value.filter((vacante) => {
-      const matchBusqueda = vacante.titulo
-        .toLowerCase()
-        .includes(busqueda.value.toLowerCase())
+      const matchBusqueda = vacante.titulo.toLowerCase().includes(busqueda.value.toLowerCase())
       const matchArea = !filtroArea.value || vacante.area === filtroArea.value
-      const matchNivel =
-        !filtroNivel.value || vacante.nivel === filtroNivel.value
+      const matchNivel = !filtroNivel.value || vacante.nivel === filtroNivel.value
 
       return matchBusqueda && matchArea && matchNivel
     })
@@ -72,8 +69,7 @@ export const useVacanteStore = defineStore('vacante', () => {
       const response = await vacanteService.getCandidatos(vacanteId, params)
       return { success: true, data: response.data }
     } catch (err) {
-      error.value =
-        err.response?.data?.message || 'Error al obtener candidatos'
+      error.value = err.response?.data?.message || 'Error al obtener candidatos'
       return { success: false, error: error.value }
     } finally {
       loading.value = false
@@ -106,8 +102,7 @@ export const useVacanteStore = defineStore('vacante', () => {
       aplicaciones.value = response.data
       return { success: true }
     } catch (err) {
-      error.value =
-        err.response?.data?.message || 'Error al obtener aplicaciones'
+      error.value = err.response?.data?.message || 'Error al obtener aplicaciones'
       return { success: false, error: error.value }
     } finally {
       loading.value = false
@@ -121,8 +116,7 @@ export const useVacanteStore = defineStore('vacante', () => {
       const response = await aplicacionService.getById(id)
       return { success: true, data: response.data }
     } catch (err) {
-      error.value =
-        err.response?.data?.message || 'Error al obtener aplicación'
+      error.value = err.response?.data?.message || 'Error al obtener aplicación'
       return { success: false, error: error.value }
     } finally {
       loading.value = false
@@ -140,8 +134,7 @@ export const useVacanteStore = defineStore('vacante', () => {
       }
       return { success: true, data: response.data }
     } catch (err) {
-      error.value =
-        err.response?.data?.message || 'Error al actualizar estado'
+      error.value = err.response?.data?.message || 'Error al actualizar estado'
       return { success: false, error: error.value }
     } finally {
       loading.value = false

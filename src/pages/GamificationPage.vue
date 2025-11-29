@@ -14,9 +14,7 @@
             <div class="text-white">
               <div class="text-h6">Puntos Totales</div>
               <div class="text-h2 text-weight-bold q-mt-md">{{ puntosTotales }}</div>
-              <div class="text-caption q-mt-md">
-                +{{ puntosMesActual }} este mes
-              </div>
+              <div class="text-caption q-mt-md">+{{ puntosMesActual }} este mes</div>
             </div>
           </q-card-section>
         </q-card>
@@ -42,7 +40,13 @@
     <q-card class="q-mt-lg">
       <q-card-section>
         <div class="text-h6 q-mb-md">Historial de Puntos</div>
-        <q-table :rows="colaboradorStore.puntosHistorial" :columns="columnasHistorial" flat bordered row-key="id" />
+        <q-table
+          :rows="colaboradorStore.puntosHistorial"
+          :columns="columnasHistorial"
+          flat
+          bordered
+          row-key="id"
+        />
       </q-card-section>
     </q-card>
   </q-page>

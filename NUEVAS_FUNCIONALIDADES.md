@@ -17,6 +17,7 @@ Se han implementado todas las funcionalidades solicitadas para crear un sistema 
 ### Nuevos Stores (Pinia)
 
 #### 1. **profile.js** - Gestión de Perfil de Usuario
+
 ```javascript
 // Estado
 - profile: objeto con datos personales, skills y certificaciones
@@ -36,6 +37,7 @@ Se han implementado todas las funcionalidades solicitadas para crear un sistema 
 **Niveles de Competencia:** Básico, Intermedio, Avanzado
 
 #### 2. **opportunities.js** - Gestión de Oportunidades
+
 ```javascript
 // Estado
 - opportunities: lista de vacantes disponibles
@@ -53,6 +55,7 @@ Se han implementado todas las funcionalidades solicitadas para crear un sistema 
 ```
 
 #### 3. **gamification.js** - Sistema de Puntos y Logros
+
 ```javascript
 // Estado
 - points: puntos totales acumulados
@@ -66,6 +69,7 @@ Se han implementado todas las funcionalidades solicitadas para crear un sistema 
 ```
 
 **Acciones que dan Puntos:**
+
 - `complete-profile`: Perfil completado (50 puntos)
 - `add-certification`: Certificación validada (30 puntos)
 - `complete-course`: Curso completado (20 puntos)
@@ -73,6 +77,7 @@ Se han implementado todas las funcionalidades solicitadas para crear un sistema 
 - `skill-verified`: Competencia verificada (15 puntos)
 
 #### 4. **notifications.js** - Sistema de Notificaciones
+
 ```javascript
 // Estado
 - notifications: lista de notificaciones
@@ -87,6 +92,7 @@ Se han implementado todas las funcionalidades solicitadas para crear un sistema 
 ```
 
 #### 5. **benefits.js** - Gestión de Beneficios
+
 ```javascript
 // Estado
 - benefits: paquete de beneficios del usuario
@@ -105,9 +111,10 @@ Se han implementado todas las funcionalidades solicitadas para crear un sistema 
 ### 1. **MyProfilePage.vue** - Perfil Completo del Usuario
 
 **Secciones:**
+
 - **Header**: Avatar con iniciales, nombre, email, barra de progreso
 - **Datos Personales**: Teléfono, ubicación, departamento, puesto
-- **Skills & Competencias**: 
+- **Skills & Competencias**:
   - Agregar nuevas competencias con niveles
   - Editar nivel de dominio
   - Eliminar competencias
@@ -118,6 +125,7 @@ Se han implementado todas las funcionalidades solicitadas para crear un sistema 
 - **Experiencia**: Descripción de experiencia laboral
 
 **Características:**
+
 - Cálculo automático de porcentaje de completitud del perfil
 - Diálogos para editar información básica
 - Validaciones de entrada
@@ -126,6 +134,7 @@ Se han implementado todas las funcionalidades solicitadas para crear un sistema 
 ### 2. **OpportunitiesPage.vue** - Búsqueda de Vacantes
 
 **Características:**
+
 - Búsqueda por título o descripción (en tiempo real)
 - Filtro por departamento
 - Visualización de skills requeridos por vacante
@@ -135,6 +144,7 @@ Se han implementado todas las funcionalidades solicitadas para crear un sistema 
 - Estado visual de "Ya aplicada"
 
 **Información mostrada:**
+
 - Título y descripción del puesto
 - Departamento y ubicación
 - Skills requeridos
@@ -144,11 +154,13 @@ Se han implementado todas las funcionalidades solicitadas para crear un sistema 
 ### 3. **GamificationPage.vue** - Puntos y Logros
 
 **Tabs:**
+
 1. **Desglose de Puntos**: Distribución por tipo de acción
 2. **Historial**: Timeline de puntos ganados
 3. **Logros**: Logros desbloqueados (con icono, descripción, estado)
 
 **Visualización:**
+
 - Grandes números para puntos totales
 - Timeline interactivo para historial
 - Cards para logros con estado
@@ -157,6 +169,7 @@ Se han implementado todas las funcionalidades solicitadas para crear un sistema 
 ### 4. **BenefitsPage.vue** - Beneficios y Salida
 
 **Tabs:**
+
 1. **Beneficios**:
    - Salario base anual
    - Plan de seguro de salud
@@ -176,6 +189,7 @@ Se han implementado todas las funcionalidades solicitadas para crear un sistema 
 ## 🔄 Flujos de Negocio
 
 ### Flujo de Edición de Perfil
+
 ```
 Usuario → Mi Perfil → Editar Datos / Agregar Skill / Agregar Certificación
 → Validación → Backend → Actualización de Estado → Notificación
@@ -183,6 +197,7 @@ Usuario → Mi Perfil → Editar Datos / Agregar Skill / Agregar Certificación
 ```
 
 ### Flujo de Aplicación a Oportunidad
+
 ```
 Usuario → Oportunidades → Ver Detalles → Aplicar
 → Confirmación → Backend → Agregar a Mis Aplicaciones
@@ -191,6 +206,7 @@ Usuario → Oportunidades → Ver Detalles → Aplicar
 ```
 
 ### Flujo de Gamificación
+
 ```
 Acción completada → Sistema calcula puntos
 → Agrega a historial → Actualiza total
@@ -198,6 +214,7 @@ Acción completada → Sistema calcula puntos
 ```
 
 ### Flujo de Encuesta de Salida
+
 ```
 Usuario en proceso de retiro → Beneficios → Encuesta
 → Completa formulario → Envía → Backend
@@ -209,6 +226,7 @@ Usuario en proceso de retiro → Beneficios → Encuesta
 ## 🔌 Endpoints Esperados en Backend
 
 ### Perfil
+
 ```
 GET    /profile/{userId}           - Obtener perfil
 PUT    /profile/{userId}           - Actualizar perfil
@@ -220,6 +238,7 @@ DELETE /certifications/{certId}    - Eliminar certificación
 ```
 
 ### Oportunidades
+
 ```
 GET    /opportunities              - Listar vacantes
 POST   /applications               - Aplicar a vacante
@@ -228,6 +247,7 @@ DELETE /applications/{appId}       - Retirar aplicación
 ```
 
 ### Gamificación
+
 ```
 GET    /points                     - Puntos totales e historial
 POST   /points                     - Agregar puntos
@@ -235,6 +255,7 @@ GET    /achievements               - Logros disponibles
 ```
 
 ### Notificaciones
+
 ```
 GET    /notifications              - Listar notificaciones
 PUT    /notifications/{notifId}    - Marcar como leída
@@ -243,6 +264,7 @@ DELETE /notifications/{notifId}    - Eliminar
 ```
 
 ### Beneficios
+
 ```
 GET    /benefits                   - Beneficios del usuario
 POST   /exit-survey                - Enviar encuesta salida
@@ -253,6 +275,7 @@ POST   /exit-survey                - Enviar encuesta salida
 ## 🎨 Componentes UI Utilizados
 
 ### Quasar Components
+
 - `q-card`: Contenedores de contenido
 - `q-dialog`: Diálogos modales
 - `q-tabs` / `q-tab-panels`: Navegación por tabs
@@ -269,6 +292,7 @@ POST   /exit-survey                - Enviar encuesta salida
 - `q-banner`: Notificaciones de error
 
 ### Estilos
+
 - Colores primarios/secundarios consistentes
 - Responsive design (xs, sm, md breakpoints)
 - Gradientes para secciones destacadas
@@ -300,6 +324,7 @@ POST   /exit-survey                - Enviar encuesta salida
 ## 📊 Datos Esperados en Backend
 
 ### Perfil Completo
+
 ```javascript
 {
   id: "user123",
@@ -324,6 +349,7 @@ POST   /exit-survey                - Enviar encuesta salida
 ```
 
 ### Oportunidad
+
 ```javascript
 {
   id: "opp1",
@@ -338,6 +364,7 @@ POST   /exit-survey                - Enviar encuesta salida
 ```
 
 ### Puntos
+
 ```javascript
 {
   totalPoints: 145,
@@ -349,10 +376,17 @@ POST   /exit-survey                - Enviar encuesta salida
 ```
 
 ### Logros
+
 ```javascript
-[
-  { id: 1, name: "Primer Paso", icon: "🎯", description: "Completa tu perfil", unlocked: true },
-  { id: 2, name: "Maestro de Skills", icon: "⭐", description: "Agrega 5 competencias", unlocked: false }
+;[
+  { id: 1, name: 'Primer Paso', icon: '🎯', description: 'Completa tu perfil', unlocked: true },
+  {
+    id: 2,
+    name: 'Maestro de Skills',
+    icon: '⭐',
+    description: 'Agrega 5 competencias',
+    unlocked: false,
+  },
 ]
 ```
 
@@ -377,4 +411,3 @@ POST   /exit-survey                - Enviar encuesta salida
 - Los errores se manejan consistentemente con `q-notify`
 - El loading se muestra en botones durante operaciones async
 - Se persiste el estado en localStorage donde aplica (auth, user)
-

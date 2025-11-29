@@ -40,29 +40,13 @@
       <q-card-section>
         <div class="row q-col-gutter-lg">
           <div class="col-xs-12 col-md-6">
-            <q-input
-              v-model="perfil.nombre"
-              label="Nombre Completo"
-              outlined
-              dense
-            />
+            <q-input v-model="perfil.nombre" label="Nombre Completo" outlined dense />
           </div>
           <div class="col-xs-12 col-md-6">
-            <q-input
-              v-model="perfil.email"
-              label="Email"
-              outlined
-              dense
-              type="email"
-            />
+            <q-input v-model="perfil.email" label="Email" outlined dense type="email" />
           </div>
           <div class="col-xs-12 col-md-6">
-            <q-input
-              v-model="perfil.telefono"
-              label="Teléfono"
-              outlined
-              dense
-            />
+            <q-input v-model="perfil.telefono" label="Teléfono" outlined dense />
           </div>
           <div class="col-xs-12 col-md-6">
             <q-select
@@ -86,12 +70,7 @@
         </div>
 
         <div class="row justify-end q-mt-lg q-gutter-md">
-          <q-btn
-            label="Guardar Perfil"
-            color="primary"
-            @click="guardarPerfil"
-            :loading="loading"
-          />
+          <q-btn label="Guardar Perfil" color="primary" @click="guardarPerfil" :loading="loading" />
         </div>
       </q-card-section>
     </q-card>
@@ -105,12 +84,7 @@
       <q-card-section>
         <div class="row q-col-gutter-md q-mb-lg">
           <div class="col-xs-12 col-md-8">
-            <q-input
-              v-model="nuevoSkill.nombre"
-              label="Nombre del Skill"
-              outlined
-              dense
-            />
+            <q-input v-model="nuevoSkill.nombre" label="Nombre del Skill" outlined dense />
           </div>
           <div class="col-xs-12 col-md-4">
             <q-select
@@ -134,11 +108,7 @@
 
         <!-- Lista de Skills -->
         <div class="row q-col-gutter-md">
-          <div
-            v-for="skill in perfil.skills"
-            :key="skill.id"
-            class="col-xs-12 col-md-6"
-          >
+          <div v-for="skill in perfil.skills" :key="skill.id" class="col-xs-12 col-md-6">
             <q-card flat bordered>
               <q-card-section>
                 <div class="row items-center justify-between">
@@ -172,20 +142,10 @@
       <q-card-section>
         <div class="row q-col-gutter-lg q-mb-lg">
           <div class="col-xs-12 col-md-6">
-            <q-input
-              v-model="nuevaCert.nombre"
-              label="Nombre"
-              outlined
-              dense
-            />
+            <q-input v-model="nuevaCert.nombre" label="Nombre" outlined dense />
           </div>
           <div class="col-xs-12 col-md-6">
-            <q-input
-              v-model="nuevaCert.institucion"
-              label="Institución"
-              outlined
-              dense
-            />
+            <q-input v-model="nuevaCert.institucion" label="Institución" outlined dense />
           </div>
           <div class="col-xs-12 col-md-6">
             <q-input
@@ -217,27 +177,13 @@
 
         <!-- Lista de Certificaciones -->
         <div class="row q-col-gutter-md">
-          <div
-            v-for="cert in certificaciones"
-            :key="cert.id"
-            class="col-xs-12 col-md-6"
-          >
+          <div v-for="cert in certificaciones" :key="cert.id" class="col-xs-12 col-md-6">
             <q-card flat bordered>
               <q-card-section>
                 <div class="text-weight-bold">{{ cert.nombre }}</div>
                 <div class="text-caption text-grey-7">{{ cert.institucion }}</div>
-                <q-badge
-                  v-if="cert.validada"
-                  label="Validada ✓"
-                  color="positive"
-                  class="q-mt-sm"
-                />
-                <q-badge
-                  v-else
-                  label="Pendiente"
-                  color="warning"
-                  class="q-mt-sm"
-                />
+                <q-badge v-if="cert.validada" label="Validada ✓" color="positive" class="q-mt-sm" />
+                <q-badge v-else label="Pendiente" color="warning" class="q-mt-sm" />
               </q-card-section>
               <q-card-actions>
                 <q-btn

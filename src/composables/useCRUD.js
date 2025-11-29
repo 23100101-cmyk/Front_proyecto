@@ -20,10 +20,14 @@ export const useCRUD = (serviceName, service) => {
       return value && value.toString().trim() !== '' ? null : `${fieldName} es requerido`
     },
     minLength: (value, length, fieldName = 'Campo') => {
-      return !value || value.toString().length >= length ? null : `${fieldName} debe tener al menos ${length} caracteres`
+      return !value || value.toString().length >= length
+        ? null
+        : `${fieldName} debe tener al menos ${length} caracteres`
     },
     maxLength: (value, length, fieldName = 'Campo') => {
-      return !value || value.toString().length <= length ? null : `${fieldName} no puede exceder ${length} caracteres`
+      return !value || value.toString().length <= length
+        ? null
+        : `${fieldName} no puede exceder ${length} caracteres`
     },
     email: (value) => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/

@@ -32,14 +32,16 @@ export default defineRouter(function () {
       auth.checkAuth()
     }
 
-    const requiresAuth = to.meta?.requiresAuth !== false
-
-    if (requiresAuth && !auth.isAuthenticated) {
-      next('/login')
-    } else if (to.path === '/login' && auth.isAuthenticated) {
-      next('/mi-perfil-dashboard')
-    } else {
+    // Permitir acceso a login y dashboard sin autenticación
+    if (to.path === '/login' || to.path === '/app/dashboard' || to.path === '/') {
       next()
+    } else {
+      const requiresAuth = to.meta?.requiresAuth !== false
+      if (requiresAuth && !auth.isAuthenticated) {
+        next('/login')
+      } else {
+        next()
+      }
     }
   })
 

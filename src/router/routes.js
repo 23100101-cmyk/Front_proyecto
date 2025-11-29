@@ -6,7 +6,7 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/login',
+    redirect: '/app/dashboard',
   },
   {
     path: '/app',

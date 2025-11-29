@@ -144,6 +144,10 @@ import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useAuthStore } from 'src/stores/auth'
 
+defineOptions({
+  name: 'LoginPage'
+})
+
 const $q = useQuasar()
 const router = useRouter()
 const auth = useAuthStore()

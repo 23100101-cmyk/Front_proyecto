@@ -107,7 +107,7 @@ const cursosFiltrados = computed(() => {
 })
 
 onMounted(async () => {
-  if (authStore.isLoggedIn) {
+  if (authStore.isAuthenticated) {
     await cargarCursos()
   }
 })
@@ -152,3 +152,4 @@ const marcarProgreso = async (cursoId) => {
   }
 }
 </script>
+

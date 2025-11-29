@@ -212,7 +212,7 @@ const vacantesFiltradas = computed(() => {
 })
 
 onMounted(async () => {
-  if (authStore.isLoggedIn) {
+  if (authStore.isAuthenticated) {
     await cargarVacantes()
   }
 })
@@ -301,3 +301,4 @@ const getColorEstado = (estado) => {
   return colorMap[estado] || 'grey'
 }
 </script>
+

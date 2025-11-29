@@ -91,7 +91,7 @@ const notificacionesNoLeidas = computed(() => notificacionStore.cantidadNoLeidas
 const notificaciones = computed(() => notificacionStore.notificaciones || [])
 
 onMounted(async () => {
-  if (authStore.isLoggedIn) {
+  if (authStore.isAuthenticated) {
     await cargarNotificaciones()
   }
 })
@@ -197,3 +197,4 @@ const formatDate = (date) => {
   }
 }
 </script>
+

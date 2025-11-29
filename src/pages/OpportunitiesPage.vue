@@ -146,8 +146,12 @@ const showDetails = ref(false)
 const vacanteActual = ref(null)
 
 onMounted(async () => {
-  if (authStore.isLoggedIn) {
-    await vacanteStore.fetchVacantes()
+  try {
+    if (authStore.isAuthenticated) {
+      await vacanteStore.fetchVacantes()
+    }
+  } catch (error) {
+    console.error('Error cargando vacantes:', error)
   }
 })
 

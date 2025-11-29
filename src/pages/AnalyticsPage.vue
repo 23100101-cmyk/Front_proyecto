@@ -355,7 +355,7 @@ const capacitacionPorArea = ref([
 ])
 
 onMounted(async () => {
-  if (authStore.isLoggedIn) {
+  if (authStore.isAuthenticated) {
     await cargarAnalytics()
   }
 })
@@ -408,3 +408,4 @@ const descargarReporteCompleto = () => {
   background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
 }
 </style>
+

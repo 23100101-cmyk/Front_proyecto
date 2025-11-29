@@ -229,7 +229,7 @@ const skillsFiltrados = computed(() => {
 })
 
 onMounted(async () => {
-  if (authStore.isLoggedIn) {
+  if (authStore.isAuthenticated) {
     await cargarSkills()
   }
 })
@@ -310,3 +310,4 @@ const getColorCriticidad = (criticidad) => {
   return colorMap[criticidad] || 'grey'
 }
 </script>
+

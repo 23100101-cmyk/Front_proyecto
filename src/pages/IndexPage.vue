@@ -17,7 +17,7 @@
         />
         <q-btn flat dense icon="logout" label="Salir" color="negative" @click="handleLogout" />
         <div class="text-subtitle1 text-grey-7">{{ auth.userDisplayName }}</div>
-        <q-avatar size="md" :color="auth.isLoggedIn ? 'primary' : 'grey-5'" text-color="white">
+        <q-avatar size="md" :color="auth.isAuthenticated ? 'primary' : 'grey-5'" text-color="white">
           {{ auth.userInitials }}
         </q-avatar>
       </div>
@@ -274,3 +274,4 @@ const handleLogout = () => {
   })
 }
 </script>
+

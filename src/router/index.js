@@ -26,35 +26,22 @@ export default defineRouter(function () {
 
   Router.beforeEach((to, from, next) => {
     const auth = useAuthStore()
-
-    // Restaurar sesión desde localStorage si es necesario
     auth.checkAuth()
 
     const isAuthenticated = auth.isAuthenticated
 
-    // Si la ruta es login
-    if (to.path === '/login') {
-      // Si está autenticado, redirigir al dashboard
-      if (isAuthenticated) {
-        return next('/app/dashboard')
-      }
-      // Si no está autenticado, permitir acceso al login
-      return next()
+    // Si intenta ir a login y ya está autenticado, ir a dashboard
+    if (to.path === '/login' && isAuthenticated) {
+      return next('/app/dashboard')
     }
 
-    // Si va a /app/dashboard o cualquier ruta bajo /app/
-    if (to.path.startsWith('/app')) {
-      // Verificar que está autenticado
-      if (!isAuthenticated) {
-        // Si no está autenticado, redirigir a login
-        return next('/login')
-      }
-      // Si está autenticado, permitir acceso
-      return next()
+    // Si intenta ir a /app sin autenticación, ir a login
+    if (to.path.startsWith('/app') && !isAuthenticated) {
+      return next('/login')
     }
 
-    // Para todas las otras rutas, permitir acceso (catch-all)
-    return next()
+    // En todos los demás casos, permitir la navegación
+    next()
   })
 
   return Router

@@ -211,7 +211,7 @@ const topActividades = ref([
 const puntosTotales = computed(() => 1250)
 
 onMounted(async () => {
-  if (authStore.isLoggedIn) {
+  if (authStore.isAuthenticated) {
     await cargarReportes()
   }
 })
@@ -260,3 +260,4 @@ const getColorEstado = (estado) => {
   return colorMap[estado] || 'grey'
 }
 </script>
+

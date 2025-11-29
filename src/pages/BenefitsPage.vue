@@ -155,7 +155,7 @@ const encuesta = ref({
 })
 
 onMounted(async () => {
-  if (authStore.isLoggedIn) {
+  if (authStore.isAuthenticated) {
     await colaboradorStore.fetchBeneficios()
   }
 })
@@ -199,3 +199,4 @@ const enviarEncuesta = () => {
   })
 }
 </script>
+

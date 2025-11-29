@@ -61,8 +61,12 @@ const colaboradorStore = useColaboradorStore()
 const authStore = useAuthStore()
 
 onMounted(async () => {
-  if (authStore.isLoggedIn) {
-    await colaboradorStore.fetchPuntos()
+  try {
+    if (authStore.isAuthenticated) {
+      await colaboradorStore.fetchPuntos()
+    }
+  } catch (error) {
+    console.error('Error cargando puntos:', error)
   }
 })
 

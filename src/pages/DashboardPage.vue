@@ -156,7 +156,7 @@ const historialReciente = ref([
 ])
 
 onMounted(async () => {
-  if (authStore.isLoggedIn) {
+  if (authStore.isAuthenticated) {
     await cargarDatos()
   }
 })
@@ -183,3 +183,4 @@ const refrescarDatos = async () => {
   await cargarDatos()
 }
 </script>
+
